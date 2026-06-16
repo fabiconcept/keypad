@@ -1,10 +1,10 @@
-# KeyPad - Floating Virtual Keyboard for macOS
+# KeyLoom - Floating Virtual Keyboard for macOS
 
 A native macOS floating keyboard panel, inspired by Dynamic Island aesthetics. Lives above all windows, accessible from the menu bar, works across every app.
 
 ## Features
 - Floats above all windows (like Dynamic Island)
-- Menu bar icon - click to show/hide
+- Menu bar icon (⌨) - click to show/hide
 - Full QWERTY layout with Shift, Caps Lock, Tab, Enter
 - Broken keys (T, t, 5, %) are highlighted in blue for easy access
 - Type in the output box, then **Copy & Paste** directly into any app
@@ -20,20 +20,20 @@ A native macOS floating keyboard panel, inspired by Dynamic Island aesthetics. L
 ## Build & Run
 
 ### Option 1: Xcode (recommended)
-1. Open `KeyPad.xcodeproj` in Xcode
+1. Open `KeyLoom.xcodeproj` in Xcode
 2. Select your Mac as the run destination
 3. Press **⌘R** to build and run
 4. The app appears in your menu bar (keyboard icon ⌨)
 
 ### Option 2: Command line
 ```bash
-xcodebuild -project KeyPad.xcodeproj -scheme KeyPad -configuration Release build
+xcodebuild -project KeyLoom.xcodeproj -scheme KeyLoom -configuration Release build
 ```
 
 ## First-time Setup
 On first launch, macOS may ask for **Accessibility permissions** so the app can paste into other apps via Cmd+V simulation. Grant this in:
 
-> System Settings → Privacy & Security → Accessibility → KeyPad ✓
+> System Settings → Privacy & Security → Accessibility → KeyLoom ✓
 
 Without this, the **Copy & Paste** button still copies to clipboard - just paste manually with ⌘V.
 
