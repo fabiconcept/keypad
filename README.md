@@ -1,10 +1,10 @@
-# KeyPad — Floating Virtual Keyboard for macOS
+# KeyPad - Floating Virtual Keyboard for macOS
 
 A native macOS floating keyboard panel, inspired by Dynamic Island aesthetics. Lives above all windows, accessible from the menu bar, works across every app.
 
 ## Features
 - Floats above all windows (like Dynamic Island)
-- Menu bar icon — click to show/hide
+- Menu bar icon - click to show/hide
 - Full QWERTY layout with Shift, Caps Lock, Tab, Enter
 - Broken keys (T, t, 5, %) are highlighted in blue for easy access
 - Type in the output box, then **Copy & Paste** directly into any app
@@ -35,12 +35,12 @@ On first launch, macOS may ask for **Accessibility permissions** so the app can 
 
 > System Settings → Privacy & Security → Accessibility → KeyPad ✓
 
-Without this, the **Copy & Paste** button still copies to clipboard — just paste manually with ⌘V.
+Without this, the **Copy & Paste** button still copies to clipboard - just paste manually with ⌘V.
 
 ## Usage
 1. Click the ⌨ icon in the menu bar to show the panel
 2. Click keys to build your text in the output box
-3. Hit **Copy & Paste** — your text is pasted directly into the active app
+3. Hit **Copy & Paste** - your text is pasted directly into the active app
 4. Or use **Copy** and manually paste with ⌘V
 
 ## Customization
