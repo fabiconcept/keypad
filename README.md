@@ -1,9 +1,9 @@
 # KeyLoom - Floating Virtual Keyboard for macOS
 
-A native macOS floating keyboard panel, inspired by Dynamic Island aesthetics. Lives above all windows, accessible from the menu bar, works across every app.
+A native macOS floating keyboard panel that lives above all windows, accessible from the menu bar, works across every app.
 
 ## Features
-- Floats above all windows (like Dynamic Island)
+- Floats above all windows
 - Menu bar icon (⌨) - click to show/hide
 - Full QWERTY layout with Shift, Caps Lock, Tab, Enter
 - Broken keys (T, t, 5, %) are highlighted in blue for easy access
