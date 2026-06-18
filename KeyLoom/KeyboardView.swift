@@ -144,8 +144,8 @@ struct KeystrokeSender {
 
     func paste(_ text: String) {
         NSPasteboard.general.clearContents()
+        ClipboardManager.shared.ignoreNextChange = true
         NSPasteboard.general.setString(text, forType: .string)
-        ClipboardManager.shared.addItem(ClipboardItem(text: text))
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
             let src = CGEventSource(stateID: .combinedSessionState)
@@ -209,6 +209,7 @@ class ClipboardManager: ObservableObject {
     private var timer: Timer?
     private var lastChangeCount: Int
     private var storageURL: URL
+    var ignoreNextChange = false
 
     var sortedItems: [ClipboardItem] {
         items.sorted {
@@ -258,6 +259,7 @@ class ClipboardManager: ObservableObject {
         let pb = NSPasteboard.general
         guard pb.changeCount != lastChangeCount else { return }
         lastChangeCount = pb.changeCount
+        if ignoreNextChange { ignoreNextChange = false; return }
         guard let text = pb.string(forType: .string), !text.isEmpty else { return }
         if items.first?.text == text { return }
         let item = ClipboardItem(text: text)
@@ -266,7 +268,11 @@ class ClipboardManager: ObservableObject {
 
     func addItem(_ item: ClipboardItem) {
         items.insert(item, at: 0)
-        if items.count > maxItems { items = Array(items.prefix(maxItems)) }
+        let pinned = items.filter(\.isPinned)
+        let unpinned = items.filter { !$0.isPinned }
+        if unpinned.count > maxItems {
+            items = pinned + unpinned.dropLast(unpinned.count - maxItems)
+        }
         save()
     }
 
@@ -278,6 +284,10 @@ class ClipboardManager: ObservableObject {
 
     func togglePin(_ item: ClipboardItem) {
         guard let i = items.firstIndex(where: { $0.id == item.id }) else { return }
+        if !items[i].isPinned {
+            let pinnedCount = items.filter(\.isPinned).count
+            guard pinnedCount < 5 else { return }
+        }
         items[i].isPinned.toggle()
         items[i].pinnedAt = items[i].isPinned ? Date() : nil
         SoundManager.shared.playClipboardPin()
@@ -291,7 +301,7 @@ class ClipboardManager: ObservableObject {
     }
 
     func clear() {
-        items.removeAll()
+        items.removeAll { !$0.isPinned }
         save()
     }
 
@@ -511,7 +521,7 @@ struct ClipboardRow: View {
 
             HStack(spacing: 0) {
                 Button(action: { clipboard.togglePin(item) }) {
-                    Image(systemName: item.isPinned ? "pin.slash.fill" : "pin.fill")
+                    Image(systemName: item.isPinned ? "pin.fill" : "pin")
                         .font(.system(size: 9))
                         .foregroundColor(item.isPinned ? .accentColor : .secondary.opacity(0.4))
                         .frame(width: 22, height: 22)
@@ -1654,6 +1664,51 @@ struct CollapsedKeyboardView: View {
                         action: { handleKey(k) }
                     )
                 }
+                Button(action: { openClipboard() }) {
+                    ZStack {
+                        if settings.neomorphismEnabled {
+                            RoundedRectangle(cornerRadius: settings.keyCornerRadius, style: .continuous)
+                                .fill(
+                                    LinearGradient(
+                                        colors: [
+                                            Color.white.opacity(0.12 * settings.neomorphismIntensity),
+                                            Color.clear,
+                                            Color.black.opacity(0.08 * settings.neomorphismIntensity)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
+                                )
+                        }
+                        Image(systemName: "clipboard")
+                            .font(.system(size: settings.fontSize - 2, weight: .medium))
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(width: settings.keySize, height: settings.keySize)
+                    .background(
+                        RoundedRectangle(cornerRadius: settings.keyCornerRadius, style: .continuous)
+                            .fill(Color(NSColor.controlColor).opacity(settings.keyOpacity))
+                    )
+                    .overlay(
+                        settings.neomorphismEnabled ?
+                            RoundedRectangle(cornerRadius: settings.keyCornerRadius, style: .continuous)
+                                .stroke(
+                                    LinearGradient(
+                                        colors: [
+                                            Color.white.opacity(0.25 * settings.neomorphismIntensity),
+                                            Color.black.opacity(0.15 * settings.neomorphismIntensity)
+                                        ],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: 1.5
+                                ) : nil
+                    )
+                    .shadow(color: settings.showKeyShadow ? .black.opacity(0.45 * settings.neomorphismIntensity) : .clear, radius: 5, x: 0, y: 3)
+                    .shadow(color: settings.showKeyShadow && settings.neomorphismEnabled ? .white.opacity(0.35 * settings.neomorphismIntensity) : .clear, radius: 3, x: 0, y: -2)
+                }
+                .buttonStyle(.plain)
+                .help("Open clipboard history")
             }
             .padding(.horizontal, isHovering ? 0 : 8)
             .padding(.bottom, 8)
@@ -1716,15 +1771,6 @@ struct CollapsedKeyboardView: View {
             .buttonStyle(.plain)
             .focusable(false)
             .help("Expand to full keyboard")
-            Button(action: { openClipboard() }) {
-                Image(systemName: "clipboard")
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundColor(.secondary)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .focusable(false)
-            .help("Open clipboard history")
             Button(action: { closeCollapsedPanel() }) {
                 Image(systemName: "xmark.circle")
                     .font(.system(size: 11, weight: .medium))
