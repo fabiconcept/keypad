@@ -26,8 +26,6 @@ struct KeystrokeSender {
     }
 
     func sendBackspace() {
-        FocusManager.shared.restore()
-
         let src = CGEventSource(stateID: .combinedSessionState)
         let keyDown = CGEvent(keyboardEventSource: src, virtualKey: 51, keyDown: true)
         let keyUp = CGEvent(keyboardEventSource: src, virtualKey: 51, keyDown: false)

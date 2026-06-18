@@ -1,35 +1,5 @@
 import SwiftUI
 import AppKit
-import ApplicationServices
-
-// MARK: - Focus Manager
-class FocusManager {
-    static let shared = FocusManager()
-    private var savedElement: AXUIElement?
-    private var savedPID: pid_t = 0
-
-    func snapshot() {
-        let sys = AXUIElementCreateSystemWide()
-        var focused: CFTypeRef?
-        let result = AXUIElementCopyAttributeValue(sys, kAXFocusedUIElementAttribute as CFString, &focused)
-        if result == .success, let element = focused {
-            savedElement = (element as! AXUIElement)
-            AXUIElementGetPid(element as! AXUIElement, &savedPID)
-        } else {
-            savedElement = nil
-            savedPID = 0
-        }
-    }
-
-    func restore() {
-        guard let element = savedElement else { return }
-        let axResult = AXUIElementSetAttributeValue(element, kAXFocusedAttribute as CFString, true as CFTypeRef)
-        if axResult == .success { return }
-        if savedPID != 0, let app = NSRunningApplication(processIdentifier: savedPID) {
-            app.activate(options: .activateIgnoringOtherApps)
-        }
-    }
-}
 
 // MARK: - App
 @main
@@ -106,6 +76,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             menu.addItem(NSMenuItem(title: "Check Accessibility Access", action: #selector(checkAccessibility), keyEquivalent: ""))
             menu.addItem(NSMenuItem(title: "About KeyLoom", action: #selector(showAbout), keyEquivalent: ""))
             menu.addItem(NSMenuItem.separator())
+            menu.addItem(NSMenuItem(title: "Force Quit", action: #selector(forceQuit), keyEquivalent: ""))
+            menu.addItem(NSMenuItem.separator())
             menu.addItem(NSMenuItem(title: "Quit KeyLoom", action: #selector(quitApp), keyEquivalent: "q"))
             button.menu = menu
         }
@@ -127,6 +99,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.addButton(withTitle: "OK")
         alert.icon = NSImage(systemSymbolName: "keyboard", accessibilityDescription: nil)
         alert.runModal()
+    }
+
+    @objc func forceQuit() {
+        NSApp.terminate(nil)
     }
 
     @objc func quitApp() {
@@ -199,12 +175,4 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 // MARK: - Floating Panel
-class FloatingPanel: NSPanel {
-    override var canBecomeKey: Bool { true }
-    override var canBecomeMain: Bool { false }
-
-    override func mouseDown(with event: NSEvent) {
-        FocusManager.shared.snapshot()
-        super.mouseDown(with: event)
-    }
-}
+class FloatingPanel: NSPanel { }
