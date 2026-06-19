@@ -4,6 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KeyLoom - Floating Virtual Keyboard for macOS</title>
+<meta name="description" content="KeyLoom is a floating virtual keyboard for macOS. Type with a customizable on-screen keyboard that stays on top of every window. Features clipboard history, broken keys, quick keys, and 6 sound styles.">
+<meta name="keywords" content="macOS, virtual keyboard, floating keyboard, on-screen keyboard, accessibility, clipboard history, KeyLoom">
+<meta name="author" content="Fabiconcept">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://keyloom.app/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="KeyLoom - Floating Virtual Keyboard for macOS">
+<meta property="og:description" content="A floating virtual keyboard for macOS. Customizable, always on top, with clipboard history, quick keys, and 6 sound styles.">
+<meta property="og:image" content="https://keyloom.app/screenshots/final/hero.png">
+<meta property="og:url" content="https://keyloom.app/">
+<meta property="og:site_name" content="KeyLoom">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="KeyLoom - Floating Virtual Keyboard for macOS">
+<meta name="twitter:description" content="A floating virtual keyboard for macOS. Customizable, always on top, with clipboard history, quick keys, and 6 sound styles.">
+<meta name="twitter:image" content="https://keyloom.app/screenshots/final/hero.png">
+<meta name="twitter:creator" content="@fabiconcept">
+<meta name="theme-color" content="#0d0d15">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="final/icon_256x256.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Elms+Sans:wght@400;500;600;700&family=Bitcount+Prop+Single:wght@400;700&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -310,22 +330,44 @@
   /* === WIRE DIVIDER === */
   .wire-divider {
     position: relative;
-    height: 60px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
   }
-  .wire-divider .wire-v {
-    width: 2px;
-    height: 40px;
-    background: linear-gradient(180deg, transparent, rgba(99,102,241,0.15), transparent);
+  .wire-divider:active { cursor: grabbing; }
+  .wire-divider svg {
+    width: 20px;
+    height: 60px;
+    overflow: visible;
+  }
+  .wire-divider .wire-rope {
+    fill: none;
+    stroke: rgba(99,102,241,0.35);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    transition: stroke 0.3s, stroke-width 0.3s;
+  }
+  .wire-divider:hover .wire-rope {
+    stroke: rgba(99,102,241,0.6);
+    stroke-width: 2;
   }
   .wire-divider .wire-dot {
     position: absolute;
-    width: 6px; height: 6px;
+    width: 7px; height: 7px;
     border-radius: 50%;
-    background: rgba(99,102,241,0.3);
-    box-shadow: 0 0 10px rgba(99,102,241,0.2);
+    background: rgba(99,102,241,0.4);
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    z-index: 2;
+  }
+  .wire-divider:hover .wire-dot,
+  .wire-divider:active .wire-dot {
+    transform: scale(1.4);
+    background: rgba(99,102,241,0.7);
+    box-shadow: 0 0 14px rgba(99,102,241,0.5), inset 0 1px 0 rgba(255,255,255,0.25);
   }
 
   /* === SECTIONS === */
@@ -1794,13 +1836,15 @@
 </div>
 
 <div class="wire-divider reveal">
-  <div class="wire-v"></div>
-  <div class="wire-dot" style="top:10px;"></div>
-  <div class="wire-dot" style="bottom:10px;"></div>
+  <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
+    <path class="wire-rope" d="M10,0 Q10,30 10,60"/>
+  </svg>
+  <div class="wire-dot" style="top:6px;"></div>
+  <div class="wire-dot" style="bottom:6px;"></div>
 </div>
 
 <!-- FEATURES -->
-<div id="features" class="section reveal" style="overflow:hidden;">
+<div id="features" class="section reveal">
   <div class="blob blob-purple" data-speed="0.4" style="width:300px;height:300px;top:-80px;right:-100px;"></div>
   <div class="blob blob-cyan" data-speed="-0.3" style="width:200px;height:200px;bottom:-60px;left:-80px;"></div>
   <div class="section-title"><span class="dot"></span>Features</div>
@@ -1840,9 +1884,11 @@
 </div>
 
 <div class="wire-divider reveal">
-  <div class="wire-v"></div>
-  <div class="wire-dot" style="top:10px;"></div>
-  <div class="wire-dot" style="bottom:10px;"></div>
+  <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
+    <path class="wire-rope" d="M10,0 Q10,30 10,60"/>
+  </svg>
+  <div class="wire-dot" style="top:6px;"></div>
+  <div class="wire-dot" style="bottom:6px;"></div>
 </div>
 
 <!-- KEYBOARD -->
@@ -1945,10 +1991,12 @@
   </div>
 </div>
 
-<div class="wire-divider">
-  <div class="wire-v"></div>
-  <div class="wire-dot" style="top:10px;"></div>
-  <div class="wire-dot" style="bottom:10px;"></div>
+<div class="wire-divider reveal">
+  <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
+    <path class="wire-rope" d="M10,0 Q10,30 10,60"/>
+  </svg>
+  <div class="wire-dot" style="top:6px;"></div>
+  <div class="wire-dot" style="bottom:6px;"></div>
 </div>
 
 <!-- SETTINGS GUIDE -->
@@ -2005,9 +2053,11 @@
 </div>
 
 <div class="wire-divider reveal">
-  <div class="wire-v"></div>
-  <div class="wire-dot" style="top:10px;"></div>
-  <div class="wire-dot" style="bottom:10px;"></div>
+  <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
+    <path class="wire-rope" d="M10,0 Q10,30 10,60"/>
+  </svg>
+  <div class="wire-dot" style="top:6px;"></div>
+  <div class="wire-dot" style="bottom:6px;"></div>
 </div>
 
 <!-- HIDDEN FEATURES -->
@@ -2043,13 +2093,15 @@
 </div>
 
 <div class="wire-divider reveal">
-  <div class="wire-v"></div>
-  <div class="wire-dot" style="top:10px;"></div>
-  <div class="wire-dot" style="bottom:10px;"></div>
+  <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
+    <path class="wire-rope" d="M10,0 Q10,30 10,60"/>
+  </svg>
+  <div class="wire-dot" style="top:6px;"></div>
+  <div class="wire-dot" style="bottom:6px;"></div>
 </div>
 
 <!-- SCREENSHOTS -->
-<div id="screenshots" class="section reveal" style="overflow:hidden;">
+<div id="screenshots" class="section reveal">
   <div class="blob blob-green" data-speed="0.45" style="width:280px;height:280px;top:-50px;left:10%;"></div>
   <div class="blob blob-blue" data-speed="-0.4" style="width:220px;height:220px;bottom:-40px;right:5%;"></div>
   <div class="section-title"><span class="dot"></span>Screenshots</div>
@@ -2083,9 +2135,11 @@
 </div>
 
 <div class="wire-divider reveal">
-  <div class="wire-v"></div>
-  <div class="wire-dot" style="top:10px;"></div>
-  <div class="wire-dot" style="bottom:10px;"></div>
+  <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
+    <path class="wire-rope" d="M10,0 Q10,30 10,60"/>
+  </svg>
+  <div class="wire-dot" style="top:6px;"></div>
+  <div class="wire-dot" style="bottom:6px;"></div>
 </div>
 
 <!-- VIDEO -->
@@ -2112,9 +2166,11 @@
 </div>
 
 <div class="wire-divider reveal">
-  <div class="wire-v"></div>
-  <div class="wire-dot" style="top:10px;"></div>
-  <div class="wire-dot" style="bottom:10px;"></div>
+  <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
+    <path class="wire-rope" d="M10,0 Q10,30 10,60"/>
+  </svg>
+  <div class="wire-dot" style="top:6px;"></div>
+  <div class="wire-dot" style="bottom:6px;"></div>
 </div>
 
 <!-- FOOTER -->
@@ -3061,6 +3117,120 @@ document.addEventListener('DOMContentLoaded', () => {
 
   checkNavbar();
   scrollSpy();
+})();
+</script>
+<script>
+(() => {
+  const SEGMENTS = 10;
+  const GRAVITY = 0.12;
+  const DAMPING = 0.93;
+  const ITERATIONS = 10;
+  const SPREAD = 0.25;
+  const CENTER_X = 10;
+  const HEIGHT = 60;
+
+  document.querySelectorAll('.wire-divider').forEach(divider => {
+    const svg = divider.querySelector('.rope-svg');
+    const path = divider.querySelector('.wire-rope');
+    if (!svg || !path) return;
+
+    const points = [];
+    for (let i = 0; i <= SEGMENTS; i++) {
+      const y = (HEIGHT / SEGMENTS) * i;
+      points.push({ x: CENTER_X, y, ox: CENTER_X, oy: y });
+    }
+
+    let dragging = false;
+    let dragIdx = -1;
+
+    function getMousePos(e) {
+      const rect = svg.getBoundingClientRect();
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return ((clientY - rect.top) / rect.height) * HEIGHT;
+    }
+
+    function onDragStart(e) {
+      e.preventDefault();
+      dragging = true;
+      const y = getMousePos(e);
+      let minDist = Infinity;
+      points.forEach((p, i) => {
+        if (i === 0 || i === SEGMENTS) return;
+        const d = Math.abs(p.y - y);
+        if (d < minDist) { minDist = d; dragIdx = i; }
+      });
+    }
+
+    divider.addEventListener('mousedown', onDragStart);
+    divider.addEventListener('touchstart', onDragStart, { passive: false });
+
+    function onDragMove(e) {
+      if (!dragging || dragIdx < 0) return;
+      e.preventDefault();
+      points[dragIdx].y = getMousePos(e);
+      points[dragIdx].x = CENTER_X + (Math.random() - 0.5) * 3;
+    }
+
+    window.addEventListener('mousemove', onDragMove);
+    window.addEventListener('touchmove', onDragMove, { passive: false });
+
+    function onDragEnd() { dragging = false; dragIdx = -1; }
+    window.addEventListener('mouseup', onDragEnd);
+    window.addEventListener('touchend', onDragEnd);
+
+    function verlet() {
+      for (let i = 1; i < SEGMENTS; i++) {
+        if (dragging && i === dragIdx) continue;
+        const p = points[i];
+        const vx = (p.x - p.ox) * DAMPING;
+        const vy = (p.y - p.oy) * DAMPING;
+        p.ox = p.x;
+        p.oy = p.y;
+        p.x += vx + (Math.random() - 0.5) * 0.06;
+        p.y += vy + GRAVITY;
+      }
+      points[0].x = CENTER_X; points[0].y = 0;
+      points[SEGMENTS].x = CENTER_X; points[SEGMENTS].y = HEIGHT;
+      for (let iter = 0; iter < ITERATIONS; iter++) {
+        for (let i = 0; i < SEGMENTS; i++) {
+          const a = points[i], b = points[i + 1];
+          const dx = b.x - a.x, dy = b.y - a.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const diff = (1 - dist) * SPREAD * 0.5;
+          const ox = dx * diff, oy = dy * diff;
+          if (!(dragging && i === 0)) { a.x -= ox; a.y -= oy; }
+          if (!(dragging && i + 1 === SEGMENTS)) { b.x += ox; b.y += oy; }
+        }
+        points[0].x = CENTER_X; points[0].y = 0;
+        points[SEGMENTS].x = CENTER_X; points[SEGMENTS].y = HEIGHT;
+      }
+    }
+
+    function buildPath() {
+      let d = `M${points[0].x.toFixed(1)},${points[0].y.toFixed(1)}`;
+      for (let i = 1; i <= SEGMENTS; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        const mx = (prev.x + curr.x) / 2;
+        const my = (prev.y + curr.y) / 2;
+        d += ` Q${prev.x.toFixed(1)},${prev.y.toFixed(1)} ${mx.toFixed(1)},${my.toFixed(1)}`;
+      }
+      return d;
+    }
+
+    // Init with sag
+    for (let i = 1; i < SEGMENTS; i++) {
+      const t = i / SEGMENTS;
+      points[i].x = CENTER_X + Math.sin(t * Math.PI) * 2;
+      points[i].ox = points[i].x;
+    }
+
+    (function loop() {
+      verlet();
+      path.setAttribute('d', buildPath());
+      requestAnimationFrame(loop);
+    })();
+  });
 })();
 </script>
 </body>
