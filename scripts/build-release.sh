@@ -54,12 +54,59 @@ if [ -d "$APP_PATH" ]; then
     echo ""
     echo "Creating DMG..."
     DMG_NAME="KeyLoom-$VERSION.dmg"
+    DMG_TEMP="$BUILD_DIR/KeyLoom-$VERSION-tmp.dmg"
+    DMG_VOLUME="KeyLoom"
+    SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+    BG_IMG="$SCRIPT_DIR/dmg-background.png"
+    WINDOW_X=200; WINDOW_Y=120; WINDOW_W=600; WINDOW_H=400
+    ICON_SIZE=90
+    APP_X=150; APP_Y=180
+    LINK_X=420; LINK_Y=180
+
     mkdir -p "$BUILD_DIR/DMG"
     cp -R "$APP_PATH" "$BUILD_DIR/DMG/"
     ln -s /Applications "$BUILD_DIR/DMG/Applications"
-    hdiutil create -volname "KeyLoom" -srcfolder "$BUILD_DIR/DMG" \
-        -ov -format UDZO "$BUILD_DIR/$DMG_NAME"
+
+    # Create read-write DMG first
+    hdiutil create -volname "$DMG_VOLUME" -srcfolder "$BUILD_DIR/DMG" \
+        -ov -format UDRW "$DMG_TEMP"
     rm -rf "$BUILD_DIR/DMG"
+
+    # Mount and customize
+    MOUNT_DIR="/Volumes/$DMG_VOLUME"
+    hdiutil attach "$DMG_TEMP" -readwrite -noverify -noautoopen -quiet
+
+    # Set window appearance via AppleScript
+    osascript << APPLESCRIPT
+tell application "Finder"
+    tell disk "$DMG_VOLUME"
+        open
+        set current view of container window to icon view
+        set toolbar visible of container window to false
+        set statusbar visible of container window to false
+        set the bounds of container window to {$WINDOW_X, $WINDOW_Y, $WINDOW_X + $WINDOW_W, $WINDOW_Y + $WINDOW_H}
+        set viewOptions to the icon view options of container window
+        set arrangement of viewOptions to not arranged
+        set icon size of viewOptions to $ICON_SIZE
+        set background picture of viewOptions to POSIX file "$BG_IMG"
+        set position of item "$SCHEME.app" of container window to {$APP_X, $APP_Y}
+        set position of item "Applications" of container window to {$LINK_X, $LINK_Y}
+        close
+        open
+        update without registering applications
+        delay 2
+        close
+    end tell
+end tell
+APPLESCRIPT
+
+    # Ensure writes are flushed
+    sync
+    hdiutil detach "$MOUNT_DIR" -quiet 2>/dev/null || hdiutil detach "$MOUNT_DIR" -force -quiet
+
+    # Convert to compressed read-only DMG
+    hdiutil convert "$DMG_TEMP" -format UDZO -imagekey zlib-level=9 -o "$BUILD_DIR/$DMG_NAME"
+    rm -f "$DMG_TEMP"
     echo "DMG: $BUILD_DIR/$DMG_NAME"
 else
     echo "Warning: App not found at expected path. Build may have failed."

@@ -368,6 +368,113 @@
     box-shadow: 0 0 8px rgba(99,102,241,0.4);
   }
 
+  /* === GUIDE SECTIONS === */
+  .guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .guide-card {
+    background: linear-gradient(145deg, #1a1a28, #13131f);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 14px;
+    padding: 28px 24px;
+    transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+  }
+  .guide-card:hover {
+    transform: translateY(-3px);
+  }
+  .guide-card h3 {
+    font-family: 'Bitcount Prop Single', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .guide-card h3 .guide-num {
+    font-family: 'Elms Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #818cf8;
+    background: rgba(99,102,241,0.12);
+    padding: 3px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+  }
+  .guide-card h3 .guide-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(99,102,241,0.1);
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .guide-card h3 .guide-icon svg {
+    width: 15px;
+    height: 15px;
+    color: #818cf8;
+  }
+  .guide-card p {
+    font-family: 'Elms Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 10px;
+  }
+  .guide-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .guide-card ul li {
+    font-family: 'Elms Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.5);
+    padding: 5px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+  .guide-card ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(99,102,241,0.4);
+  }
+  .guide-card code {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 12px;
+    background: rgba(99,102,241,0.1);
+    color: #a5b4fc;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .guide-card .guide-tip {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(99,102,241,0.06);
+    border-left: 2px solid rgba(99,102,241,0.3);
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.7;
+  }
+  .guide-card-full {
+    grid-column: 1 / -1;
+  }
+  @media (max-width: 700px) {
+    .guide-grid { grid-template-columns: 1fr; }
+  }
+
   /* === BLUR BLOBS === */
   .blob {
     position: absolute;
@@ -971,10 +1078,10 @@
   /* === FEATURES === */
   .section-desc {
     font-family: 'Elms Sans', sans-serif;
-    font-size: 15px;
-    line-height: 1.7;
-    color: rgba(255,255,255,0.45);
-    max-width: 640px;
+    font-size: 16px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.5);
+    max-width: 680px;
     margin-bottom: 32px;
   }
   .features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
@@ -1036,14 +1143,98 @@
     letter-spacing: -1.5px;
     opacity: 0.8;
   }
-  .footer-sub { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.3); margin-bottom: 28px; }
-  .footer-links { display: flex; justify-content: center; gap: 32px; margin-bottom: 28px; }
-  .footer-links a {
-    font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.35);
-    text-decoration: none; transition: color 0.2s, transform 0.2s;
-    text-transform: uppercase; letter-spacing: 1px;
+  .footer-sub { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.3); margin-bottom: 32px; }
+  .footer-cards {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
   }
-  .footer-links a:hover { color: #818cf8; transform: translateY(-1px); }
+  .footer-card {
+    position: relative;
+    background: linear-gradient(180deg, #2e2e42 0%, #1e1e30 40%, #16162a 100%);
+    border: none;
+    border-radius: 14px;
+    padding: 0;
+    cursor: pointer;
+    box-shadow:
+      0 4px 0 0 #0c0c18,
+      0 5px 0 0 #080812,
+      0 6px 14px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.07),
+      inset 0 -1px 0 rgba(0,0,0,0.25);
+    transition: all 0.12s ease;
+    overflow: hidden;
+    text-decoration: none;
+  }
+  .footer-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+    border-radius: 14px 14px 0 0;
+    pointer-events: none;
+  }
+  .footer-card::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(99,102,241,0.12) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .footer-card:hover {
+    box-shadow:
+      0 5px 0 0 #0c0c18,
+      0 6px 0 0 #080812,
+      0 8px 24px rgba(99,102,241,0.3),
+      0 8px 14px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.09),
+      inset 0 -1px 0 rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+  }
+  .footer-card:hover::after {
+    opacity: 1;
+  }
+  .footer-card:active {
+    box-shadow:
+      0 1px 0 0 #0c0c18,
+      0 2px 0 0 #080812,
+      0 2px 8px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.03),
+      inset 0 -1px 0 rgba(0,0,0,0.15);
+    transform: translateY(3px);
+  }
+  .footer-card-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    position: relative;
+    z-index: 1;
+    font-family: 'Elms Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    transition: color 0.2s;
+  }
+  .footer-card:hover .footer-card-inner {
+    color: #c4b5fd;
+  }
+  .footer-card-inner svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .footer-card:hover .footer-card-inner svg {
+    opacity: 1;
+  }
   .footer-divider {
     width: 40px; height: 1px;
     background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent);
@@ -1193,7 +1384,10 @@
     .viewer-next { right: 8px; }
     .viewer-thumb { width: 40px; height: 30px; }
     .viewer-stage { padding: 0 50px; }
-    .footer-links { gap: 16px; }
+    .footer-cards { gap: 8px; }
+    .footer-card-inner { padding: 10px 16px; font-size: 12px; }
+    .video-placeholder { min-width: 0; height: 280px; }
+    .video-container { padding: 0; }
   }
   @media (max-width: 480px) {
     .hero h1 { font-size: 26px; }
@@ -1205,6 +1399,194 @@
     .feat { padding: 18px 14px; }
     .feat h3 { font-size: 13px; }
     .feat p { font-size: 11px; }
+    .video-placeholder { height: 200px; }
+    .footer-cards { gap: 8px; }
+    .footer-card-inner { padding: 10px 14px; font-size: 12px; }
+  }
+
+  /* === CAPSULE NAVBAR === */
+  .navbar {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(180deg, #1e1e30, #16162a);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 50px;
+    padding: 5px 6px;
+    box-shadow:
+      0 4px 0 0 #0c0c18,
+      0 6px 0 0 #080812,
+      0 10px 30px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.06);
+    backdrop-filter: blur(12px);
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .navbar.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .navbar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 100%);
+    border-radius: 50px 50px 0 0;
+    pointer-events: none;
+  }
+  .nav-brand {
+    font-family: 'Bitcount Prop Single', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #818cf8;
+    padding: 8px 14px;
+    letter-spacing: -0.5px;
+    cursor: pointer;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  .nav-brand:hover { color: #a5b4fc; }
+  .nav-sep {
+    width: 1px;
+    height: 20px;
+    background: rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-links li a {
+    font-family: 'Elms Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.35);
+    text-decoration: none;
+    padding: 7px 14px;
+    border-radius: 40px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    position: relative;
+  }
+  .nav-links li a:hover {
+    color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.04);
+  }
+  .nav-links li a.active {
+    color: #fff;
+    background: rgba(99,102,241,0.15);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .nav-links li a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 2px;
+    background: #818cf8;
+    border-radius: 2px;
+  }
+  .nav-cta {
+    font-family: 'Elms Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(180deg, #6366f1, #4f46e5);
+    border: none;
+    border-radius: 40px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 0 0 #3730a3, inset 0 1px 0 rgba(255,255,255,0.1);
+    white-space: nowrap;
+  }
+  .nav-cta:hover {
+    background: linear-gradient(180deg, #818cf8, #6366f1);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 0 0 #3730a3, 0 4px 12px rgba(99,102,241,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+  .nav-cta:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 0 #3730a3, inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  .nav-hamburger span {
+    width: 18px;
+    height: 2px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  .nav-hamburger.open span:nth-child(1) {
+    transform: rotate(45deg) translate(4px, 4px);
+  }
+  .nav-hamburger.open span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-hamburger.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(4px, -4px);
+  }
+  .nav-mobile {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, #1e1e30, #16162a);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .nav-mobile.open {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .nav-mobile a {
+    display: block;
+    font-family: 'Elms Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    transition: all 0.2s;
+  }
+  .nav-mobile a:hover,
+  .nav-mobile a.active {
+    color: #fff;
+    background: rgba(99,102,241,0.1);
+  }
+  @media (max-width: 860px) {
+    .nav-links, .nav-sep, .nav-cta { display: none; }
+    .nav-hamburger { display: flex; }
   }
 
   /* === ENTRANCE ANIMATIONS === */
@@ -1320,6 +1702,34 @@
 </head>
 <body>
 
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <span class="nav-brand">KeyLoom</span>
+  <div class="nav-sep"></div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#keyboard">Keyboard</a></li>
+    <li><a href="#settings">Settings</a></li>
+    <li><a href="#hidden">Hidden</a></li>
+    <li><a href="#screenshots">Screenshots</a></li>
+  </ul>
+  <div class="nav-sep"></div>
+  <button class="nav-cta" onclick="window.open('https://github.com/fabiconcept','_blank')">Get App</button>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#keyboard">Keyboard</a>
+    <a href="#settings">Settings</a>
+    <a href="#hidden">Hidden</a>
+    <a href="#screenshots">Screenshots</a>
+    <a href="https://github.com/fabiconcept" target="_blank">Get App</a>
+  </div>
+</nav>
+
 <!-- Floating hanging hero -->
 <div class="floating-hang" id="floating-hang">
   <svg class="floating-hang-svg" id="floating-hang-svg">
@@ -1390,7 +1800,7 @@
 </div>
 
 <!-- FEATURES -->
-<div class="section reveal" style="overflow:hidden;">
+<div id="features" class="section reveal" style="overflow:hidden;">
   <div class="blob blob-purple" data-speed="0.4" style="width:300px;height:300px;top:-80px;right:-100px;"></div>
   <div class="blob blob-cyan" data-speed="-0.3" style="width:200px;height:200px;bottom:-60px;left:-80px;"></div>
   <div class="section-title"><span class="dot"></span>Features</div>
@@ -1405,25 +1815,26 @@
   </div>
 </div>
 
-<!-- VIDEO -->
-<div class="section reveal-up" style="padding-top:80px; padding-bottom:80px; overflow:hidden;">
-  <div class="blob blob-pink" data-speed="-0.5" style="width:350px;height:350px;top:10%;left:-120px;"></div>
-  <div class="blob blob-amber" data-speed="0.35" style="width:250px;height:250px;bottom:5%;right:-80px;"></div>
-  <div class="section-title"><span class="dot"></span>See It in Action</div>
-  <p class="section-desc reveal stagger-1">Watch KeyLoom in real use. See how the floating keyboard integrates seamlessly into your macOS workflow without getting in the way.</p>
-  <div class="tray-perspective reveal-scale stagger-2">
-    <div class="tray-lid">
-      <span class="tray-dot red"></span>
-      <span class="tray-dot yellow"></span>
-      <span class="tray-dot green"></span>
+<!-- HOW IT WORKS -->
+<div id="how-it-works" class="section reveal">
+  <div class="section-title"><span class="dot"></span>How It Works</div>
+  <p class="section-desc reveal stagger-1">KeyLoom runs as a menu bar app. Click the icon to toggle the floating keyboard on or off.</p>
+  <div class="guide-grid">
+    <div class="guide-card reveal stagger-2">
+      <h3><span class="guide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg></span> Launching the App</h3>
+      <ul>
+        <li>Grant <strong>Accessibility</strong> and <strong>Input Monitoring</strong> permissions on first launch.</li>
+        <li>Keyboard appears at screen center. Drag it anywhere.</li>
+        <li>Stays on top of every window across all Spaces.</li>
+      </ul>
     </div>
-    <div class="tray-surface" style="height:auto;opacity:1;overflow:visible;">
-      <div class="video-container">
-        <div class="video-placeholder">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          <p>Video demo coming soon</p>
-        </div>
-      </div>
+    <div class="guide-card reveal stagger-3">
+      <h3><span class="guide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/></svg></span> Typing with KeyLoom</h3>
+      <ul>
+        <li>Click any key. Character is pasted into your focused app via <code>Cmd+V</code>.</li>
+        <li>Works in any app: Notes, Safari, Terminal, Slack, VS Code.</li>
+        <li>Physical keyboard still works normally.</li>
+      </ul>
     </div>
   </div>
 </div>
@@ -1435,7 +1846,7 @@
 </div>
 
 <!-- KEYBOARD -->
-<div class="section section-tall reveal">
+<div id="keyboard" class="section section-tall reveal">
   <div class="section-title"><span class="dot"></span>Keyboard</div>
   <p class="section-desc reveal stagger-1">A full QWERTY layout rendered in 3D, right on your screen. Every key is clickable, and the keyboard responds to your physical key presses in real time. Rotate and explore it below.</p>
   <div class="kb3d-controls reveal stagger-2">
@@ -1540,8 +1951,105 @@
   <div class="wire-dot" style="bottom:10px;"></div>
 </div>
 
+<!-- SETTINGS GUIDE -->
+<div id="settings" class="section reveal">
+  <div class="section-title"><span class="dot"></span>Settings Guide</div>
+  <p class="section-desc reveal stagger-1">Click the gear icon in the menu bar. Everything is organized into five tabs.</p>
+  <div class="guide-grid">
+    <div class="guide-card reveal stagger-2">
+      <h3><span class="guide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span> Layout</h3>
+      <ul>
+        <li><strong>Size</strong> — scale from compact to full.</li>
+        <li><strong>Opacity</strong> — make it see-through.</li>
+        <li><strong>Position</strong> — snap to top, center, or bottom.</li>
+        <li><strong>Always on top</strong> — float above other windows.</li>
+      </ul>
+    </div>
+    <div class="guide-card reveal stagger-3">
+      <h3><span class="guide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="11.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="12" cy="19" r="2.5"/><path d="M12 19l-3.5-3.5"/></svg></span> Style</h3>
+      <ul>
+        <li><strong>Theme</strong> — Dark, Light, or System auto-switch.</li>
+        <li><strong>Accent color</strong> — highlight for active keys.</li>
+        <li><strong>Key shape</strong> — rounded, square, or pill.</li>
+        <li><strong>Font weight</strong> — light, regular, or bold labels.</li>
+      </ul>
+    </div>
+    <div class="guide-card reveal stagger-4">
+      <h3><span class="guide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span> Behavior</h3>
+      <ul>
+        <li><strong>Auto-hide</strong> — fade out after inactivity.</li>
+        <li><strong>Key delay</strong> — adjust repeat speed.</li>
+        <li><strong>Sound</strong> — toggle keypress audio.</li>
+        <li><strong>Launch at login</strong> — auto-start on boot.</li>
+      </ul>
+    </div>
+    <div class="guide-card reveal stagger-5">
+      <h3><span class="guide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span> Sounds</h3>
+      <ul>
+        <li><strong>Key Click</strong> — sharp snap.</li>
+        <li><strong>Soft</strong> — gentle tap.</li>
+        <li><strong>Mechanical</strong> — Cherry MX clack.</li>
+        <li><strong>Glass / Minimal / Bottle</strong> — more options.</li>
+      </ul>
+    </div>
+    <div class="guide-card reveal stagger-6">
+      <h3><span class="guide-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></span> Clipboard</h3>
+      <ul>
+        <li><strong>History</strong> — auto-copies typed text. Browse and reuse.</li>
+        <li><strong>Pin items</strong> — keep important snippets. Max 5.</li>
+        <li><strong>Export</strong> — save history as text file.</li>
+        <li><strong>Quick keys</strong> — configure the shortcut strip.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="wire-divider reveal">
+  <div class="wire-v"></div>
+  <div class="wire-dot" style="top:10px;"></div>
+  <div class="wire-dot" style="bottom:10px;"></div>
+</div>
+
+<!-- HIDDEN FEATURES -->
+<div id="hidden" class="section reveal">
+  <div class="section-title"><span class="dot"></span>Hidden Features</div>
+  <p class="section-desc reveal stagger-1">KeyLoom has a few tricks you might not discover on your own. These are power-user features built right in.</p>
+  <div class="guide-grid">
+    <div class="guide-card reveal stagger-2">
+      <h3><span class="guide-num">01</span> Physical Key Sync</h3>
+      <p>When you press <code>Shift</code> or <code>Caps Lock</code> on your real keyboard, KeyLoom detects it instantly. The virtual keyboard updates to show uppercase letters and the correct symbols. No lag, no config needed.</p>
+    </div>
+    <div class="guide-card reveal stagger-3">
+      <h3><span class="guide-num">02</span> Broken Keys</h3>
+      <p>The <code>T</code> and <code>B</code> keys are highlighted in a different color. These are your most-used keys based on average typing frequency. The highlight helps you locate them faster during rapid input.</p>
+    </div>
+    <div class="guide-card reveal stagger-4">
+      <h3><span class="guide-num">03</span> Quick Keys Strip</h3>
+      <p>Switch to the collapsed mode to get a thin strip of your most-used keys instead of the full keyboard. Perfect for quick symbol entry without the full panel blocking your view. Toggle it from the menu bar icon.</p>
+    </div>
+    <div class="guide-card reveal stagger-5">
+      <h3><span class="guide-num">04</span> Drag and Reorder</h3>
+      <p>The keyboard is not fixed. Click and drag the panel to reposition it anywhere on screen. It remembers its last position between launches so you never have to move it again.</p>
+    </div>
+    <div class="guide-card reveal stagger-6">
+      <h3><span class="guide-num">05</span> Menu Bar Shortcuts</h3>
+      <p>Right-click the menu bar icon for quick actions: toggle keyboard, open settings, clear clipboard history, or quit. No need to open the full app for common tasks.</p>
+    </div>
+    <div class="guide-card reveal stagger-7">
+      <h3><span class="guide-num">06</span> Clipboard Auto-Monitor</h3>
+      <p>Every text you type through KeyLoom is automatically saved to clipboard history. You can search past entries, pin important ones, and export everything as a text file from the Settings panel.</p>
+    </div>
+  </div>
+</div>
+
+<div class="wire-divider reveal">
+  <div class="wire-v"></div>
+  <div class="wire-dot" style="top:10px;"></div>
+  <div class="wire-dot" style="bottom:10px;"></div>
+</div>
+
 <!-- SCREENSHOTS -->
-<div class="section reveal" style="overflow:hidden;">
+<div id="screenshots" class="section reveal" style="overflow:hidden;">
   <div class="blob blob-green" data-speed="0.45" style="width:280px;height:280px;top:-50px;left:10%;"></div>
   <div class="blob blob-blue" data-speed="-0.4" style="width:220px;height:220px;bottom:-40px;right:5%;"></div>
   <div class="section-title"><span class="dot"></span>Screenshots</div>
@@ -1574,7 +2082,36 @@
   </div>
 </div>
 
-<div class="wire-divider">
+<div class="wire-divider reveal">
+  <div class="wire-v"></div>
+  <div class="wire-dot" style="top:10px;"></div>
+  <div class="wire-dot" style="bottom:10px;"></div>
+</div>
+
+<!-- VIDEO -->
+<div class="section reveal-up" style="padding-top:80px; padding-bottom:80px; overflow:hidden;">
+  <div class="blob blob-pink" data-speed="-0.5" style="width:350px;height:350px;top:10%;left:-120px;"></div>
+  <div class="blob blob-amber" data-speed="0.35" style="width:250px;height:250px;bottom:5%;right:-80px;"></div>
+  <div class="section-title"><span class="dot"></span>See It in Action</div>
+  <p class="section-desc reveal stagger-1">Watch KeyLoom in real use. See how the floating keyboard integrates seamlessly into your macOS workflow without getting in the way.</p>
+  <div class="tray-perspective reveal-scale stagger-2">
+    <div class="tray-lid">
+      <span class="tray-dot red"></span>
+      <span class="tray-dot yellow"></span>
+      <span class="tray-dot green"></span>
+    </div>
+    <div class="tray-surface" style="height:auto;opacity:1;overflow:visible;">
+      <div class="video-container">
+        <div class="video-placeholder">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <p>Video demo coming soon</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wire-divider reveal">
   <div class="wire-v"></div>
   <div class="wire-dot" style="top:10px;"></div>
   <div class="wire-dot" style="bottom:10px;"></div>
@@ -1584,7 +2121,26 @@
 <div class="footer reveal">
   <div class="footer-logo" id="footer-logo">KeyLoom</div>
   <div class="footer-sub reveal stagger-1">Designed by <a href="https://github.com/fabiconcept" target="_blank" style="color:#818cf8;text-decoration:none;">Fabiconcept</a></div>
-  <div class="footer-links reveal stagger-2"><a href="https://github.com/fabiconcept" target="_blank">GitHub</a><a href="privacy.html">Privacy Policy</a><a href="mailto:favourajokubi@gmail.com">Contact</a></div>
+  <div class="footer-cards reveal stagger-2">
+    <a href="https://github.com/fabiconcept" target="_blank" class="footer-card">
+      <span class="footer-card-inner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </span>
+    </a>
+    <a href="privacy.html" class="footer-card">
+      <span class="footer-card-inner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Privacy Policy
+      </span>
+    </a>
+    <a href="mailto:favourajokubi@gmail.com" class="footer-card">
+      <span class="footer-card-inner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Contact
+      </span>
+    </a>
+  </div>
   <div class="footer-divider reveal stagger-3"></div>
   <div class="footer-copy reveal stagger-4">&copy; 2026 KeyLoom. All rights reserved.</div>
 </div>
@@ -2423,6 +2979,88 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   update();
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// CAPSULE NAVBAR — show on scroll, scroll-spy, mobile menu
+// ═══════════════════════════════════════════════════════════════
+(() => {
+  const navbar = document.getElementById('navbar');
+  const hamburger = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('nav-mobile');
+  if (!navbar) return;
+
+  const hero = document.querySelector('.hero');
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.nav-links a, .nav-mobile a');
+
+  // Show navbar after scrolling past hero
+  function checkNavbar() {
+    if (!hero) { navbar.classList.add('visible'); return; }
+    const heroBottom = hero.getBoundingClientRect().bottom;
+    if (heroBottom < 80) {
+      navbar.classList.add('visible');
+    } else {
+      navbar.classList.remove('visible');
+    }
+  }
+
+  // Scroll-spy: highlight active section link
+  function scrollSpy() {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 120;
+      if (window.scrollY >= top) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  // Smooth scroll for nav links
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        // Close mobile menu
+        if (mobileMenu) mobileMenu.classList.remove('open');
+        if (hamburger) hamburger.classList.remove('open');
+      }
+    });
+  });
+
+  // Hamburger toggle
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+    // Close on outside click
+    document.addEventListener('click', e => {
+      if (!navbar.contains(e.target)) {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    checkNavbar();
+    scrollSpy();
+  }, { passive: true });
+
+  checkNavbar();
+  scrollSpy();
 })();
 </script>
 </body>
