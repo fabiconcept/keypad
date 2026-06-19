@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   release:
-    name: Build & Notarize
+    name: Build & Release
     runs-on: macos-14
     timeout-minutes: 30
 
@@ -35,27 +35,31 @@ jobs:
             build
 
       - name: Sign App
+        if: env.APPLE_CERTIFICATE != ''
         env:
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PWD: ${{ secrets.APPLE_CERTIFICATE_PWD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          # Decode certificate
           echo "$APPLE_CERTIFICATE" | base64 --decode > certificate.p12
           KEYCHAIN_PATH=$RUNNER_TEMP/signing.keychain-db
           security create-keychain -p "" "$KEYCHAIN_PATH"
           security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
           security unlock-keychain -p "" "$KEYCHAIN_PATH"
-          security import certificate.p12 -k "$KEYCHAIN_PATH" -P "$APPLE_CERTIFICATE_PWD" -T /usr/bin/codesign
+          security import certificate.p12 \
+            -k "$KEYCHAIN_PATH" \
+            -P "$APPLE_CERTIFICATE_PWD" \
+            -T /usr/bin/codesign \
+            -T /usr/bin/security
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "" "$KEYCHAIN_PATH"
           security list-keychain -d user -s "$KEYCHAIN_PATH"
-          # Sign
           codesign --force --deep --options runtime \
             --timestamp \
             --sign "Developer ID Application" \
             --keychain "$KEYCHAIN_PATH" \
             build/Build/Products/Release/KeyLoom.app
           rm -f certificate.p12
+          echo "App signed successfully"
 
       - name: Create DMG
         run: |
@@ -65,9 +69,10 @@ jobs:
           ln -s /Applications build/DMG/Applications
           hdiutil create -volname "KeyLoom" -srcfolder build/DMG -ov -format UDZO "KeyLoom-$VERSION.dmg"
           rm -rf build/DMG
+          echo "DMG created: KeyLoom-$VERSION.dmg"
 
       - name: Notarize
-        if: github.ref == 'refs/heads/main'
+        if: env.APPLE_ID != ''
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -80,6 +85,7 @@ jobs:
             --password "$AC_PASSWORD" \
             --wait
           xcrun stapler staple build/Build/Products/Release/KeyLoom.app
+          echo "Notarization complete"
 
       - name: Upload Release Asset
         env:
@@ -88,5 +94,5 @@ jobs:
           VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" build/Build/Products/Release/KeyLoom.app/Contents/Info.plist)
           gh release create "${{ github.ref_name }}" \
             --title "KeyLoom $VERSION" \
-            --notes "See [CHANGELOG](https://github.com/fabiconcept/keyloom/releases) for details." \
+            --generate-notes \
             "KeyLoom-$VERSION.dmg"
