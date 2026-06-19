@@ -65,11 +65,6 @@ jobs:
         run: |
           VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" build/Build/Products/Release/KeyLoom.app/Contents/Info.plist)
 
-          WINDOW_X=200; WINDOW_Y=120; WINDOW_W=600; WINDOW_H=400
-          ICON_SIZE=90
-          APP_X=150; APP_Y=180
-          LINK_X=420; LINK_Y=180
-
           mkdir -p build/DMG
           cp -R build/Build/Products/Release/KeyLoom.app build/DMG/
           ln -s /Applications build/DMG/Applications
@@ -80,28 +75,27 @@ jobs:
 
           hdiutil attach "KeyLoom-tmp.dmg" -readwrite -noverify -noautoopen -quiet
 
-          osascript << APPLESCRIPT
-tell application "Finder"
-    tell disk "KeyLoom"
-        open
-        set current view of container window to icon view
-        set toolbar visible of container window to false
-        set statusbar visible of container window to false
-        set the bounds of container window to {$WINDOW_X, $WINDOW_Y, $WINDOW_X + $WINDOW_W, $WINDOW_Y + $WINDOW_H}
-        set viewOptions to the icon view options of container window
-        set arrangement of viewOptions to not arranged
-        set icon size of viewOptions to $ICON_SIZE
-        set background picture of viewOptions to POSIX file "$GITHUB_WORKSPACE/scripts/dmg-background.png"
-        set position of item "KeyLoom.app" of container window to {$APP_X, $APP_Y}
-        set position of item "Applications" of container window to {$LINK_X, $LINK_Y}
-        close
-        open
-        update without registering applications
-        delay 2
-        close
-    end tell
-end tell
-APPLESCRIPT
+          osascript -e '
+          tell application "Finder"
+              tell disk "KeyLoom"
+                  open
+                  set current view of container window to icon view
+                  set toolbar visible of container window to false
+                  set statusbar visible of container window to false
+                  set the bounds of container window to {200, 120, 800, 520}
+                  set viewOptions to the icon view options of container window
+                  set arrangement of viewOptions to not arranged
+                  set icon size of viewOptions to 90
+                  set background picture of viewOptions to POSIX file "'"$GITHUB_WORKSPACE"'/scripts/dmg-background.png"
+                  set position of item "KeyLoom.app" of container window to {150, 180}
+                  set position of item "Applications" of container window to {420, 180}
+                  close
+                  open
+                  update without registering applications
+                  delay 2
+                  close
+              end tell
+          end tell'
 
           sync
           hdiutil detach "/Volumes/KeyLoom" -quiet 2>/dev/null || hdiutil detach "/Volumes/KeyLoom" -force -quiet
