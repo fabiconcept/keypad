@@ -2614,7 +2614,7 @@
     <div class="tray-surface" style="height:auto;opacity:1;overflow:visible;">
       <div class="video-container">
         <div class="kb-video-player" id="kb-video-player" tabindex="0">
-          <video class="kb-video" id="kb-video" preload="metadata" playsinline>
+          <video class="kb-video" id="kb-video" preload="metadata" playsinline loop>
             <source src="short-clip.MOV" type="video/mp4">
           </video>
 
@@ -3846,6 +3846,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let isSeeking = false;
     let hideControlsTimer = null;
     let lastVolume = 0.8;
+    let isInView = true;
+    let wasPlayingBeforeHide = false;
 
     // ── Helpers ──────────────────────────────────────────────
     function formatTime(s) {
@@ -3876,10 +3878,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     video.addEventListener('play', updatePlayIcon);
     video.addEventListener('pause', updatePlayIcon);
-    video.addEventListener('ended', () => {
-      updatePlayIcon();
-      overlay.classList.remove('hidden');
-    });
 
     playBtn?.addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); });
     overlay?.addEventListener('click', togglePlay);
@@ -4016,7 +4014,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     video.addEventListener('play', startKbAnim);
     video.addEventListener('pause', stopKbAnim);
-    video.addEventListener('ended', stopKbAnim);
 
     // ── Fullscreen ───────────────────────────────────────────
     function updateFullscreenIcon() {
@@ -4054,8 +4051,9 @@ document.addEventListener('DOMContentLoaded', () => {
       player.classList.remove('controls-hidden');
     });
 
-    // ── Keyboard shortcuts ───────────────────────────────────
+    // ── Keyboard shortcuts (only when in view) ──────────────
     player.addEventListener('keydown', (e) => {
+      if (!isInView) return;
       if (e.target.closest('.kb-video-speed-menu')) return;
       switch (e.code) {
         case 'Space':
@@ -4093,6 +4091,38 @@ document.addEventListener('DOMContentLoaded', () => {
         e.stopPropagation();
       }
       lastClick = now;
+    });
+
+    // ── Visibility: pause when out of view, disable shortcuts ──
+    const visibilityObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isInView = entry.isIntersecting;
+        if (!isInView) {
+          // Out of view: pause video, stop keyboard anim
+          if (!video.paused) {
+            wasPlayingBeforeHide = true;
+            video.pause();
+          }
+          stopKbAnim();
+          // Hide controls
+          player.classList.add('controls-hidden');
+          clearTimeout(hideControlsTimer);
+        } else {
+          // Back in view: resume if was playing
+          if (wasPlayingBeforeHide) {
+            wasPlayingBeforeHide = false;
+            video.play().catch(() => {});
+          }
+        }
+      });
+    }, { threshold: 0.3 });
+
+    visibilityObserver.observe(player);
+
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+      visibilityObserver.disconnect();
+      video.pause();
     });
   })();
 })();
