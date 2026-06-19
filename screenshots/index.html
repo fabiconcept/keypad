@@ -867,18 +867,21 @@
   .video-container {
     padding: 20px;
   }
-  .demo-video {
+  .video-placeholder {
     width: 100%;
-    min-width: 800px;
+    min-width: 950px;
     height: 480px;
-    object-fit: cover;
+    background: linear-gradient(145deg, #12121f, #0e0e1a);
     border-radius: 10px;
-    background: #0e0e1a;
-    outline: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: rgba(255,255,255,0.25);
+    border: 1px dashed rgba(255,255,255,0.08);
   }
-  .demo-video::-webkit-media-controls-panel {
-    background: linear-gradient(transparent, rgba(0,0,0,0.7));
-  }
+  .video-placeholder p {
     font-size: 13px;
     font-weight: 500;
   }
@@ -1453,7 +1456,7 @@
     .viewer-stage { padding: 0 50px; }
     .footer-cards { gap: 8px; }
     .footer-card-inner { padding: 10px 16px; font-size: 12px; }
-    .demo-video { min-width: 0; height: 280px; }
+    .video-placeholder { min-width: 0; height: 280px; }
     .video-container { padding: 0; }
   }
   @media (max-width: 480px) {
@@ -1466,7 +1469,7 @@
     .feat { padding: 18px 14px; }
     .feat h3 { font-size: 13px; }
     .feat p { font-size: 11px; }
-    .demo-video { height: 200px; }
+    .video-placeholder { height: 200px; }
     .footer-cards { gap: 8px; }
     .footer-card-inner { padding: 10px 14px; font-size: 12px; }
   }
@@ -2182,9 +2185,10 @@
     </div>
     <div class="tray-surface" style="height:auto;opacity:1;overflow:visible;">
       <div class="video-container">
-        <video class="demo-video" controls preload="metadata" poster="final/hero.png">
-          <source src="short-clip.MOV" type="video/quicktime">
-        </video>
+        <div class="video-placeholder">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <p>Video demo coming soon</p>
+        </div>
       </div>
     </div>
   </div>
