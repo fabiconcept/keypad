@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 - Page Not Found | KeyLoom</title>
+<meta name="description" content="The page you're looking for doesn't exist. Head back to KeyLoom.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="final/icon_256x256.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Elms+Sans:wght@400;500;600;700&family=Bitcount+Prop+Single:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Elms Sans', sans-serif;
+    background: #0d0d15;
+    color: #fff;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .bg-keys {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .bg-key {
+    position: absolute;
+    font-family: 'Elms Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(99,102,241,0.06);
+    border: 1px solid rgba(99,102,241,0.04);
+    border-radius: 6px;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.01);
+    animation: drift linear infinite;
+    will-change: transform;
+  }
+  @keyframes drift {
+    0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-10vh) rotate(var(--rot)); opacity: 0; }
+  }
+
+  .scene {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .error-keys {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 32px;
+    perspective: 600px;
+  }
+  .error-key {
+    width: 90px;
+    height: 90px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #2e2e42 0%, #1e1e30 40%, #16162a 100%);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bitcount Prop Single', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: #818cf8;
+    cursor: pointer;
+    position: relative;
+    box-shadow:
+      0 6px 0 0 #0c0c18,
+      0 8px 0 0 #080812,
+      0 10px 20px rgba(0,0,0,0.5),
+      inset 0 1px 0 rgba(255,255,255,0.08),
+      inset 0 -1px 0 rgba(0,0,0,0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+    transform: rotateX(var(--rx, 0deg));
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .error-key::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 100%);
+    border-radius: 14px 14px 0 0;
+    pointer-events: none;
+  }
+  .error-key::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(99,102,241,0.15) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+  .error-key:hover::after { opacity: 1; }
+  .error-key:hover {
+    box-shadow:
+      0 7px 0 0 #0c0c18,
+      0 9px 0 0 #080812,
+      0 12px 32px rgba(99,102,241,0.35),
+      0 12px 20px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.1),
+      inset 0 -1px 0 rgba(0,0,0,0.3);
+    transform: rotateX(var(--rx, 0deg)) translateY(-2px);
+  }
+  .error-key:active {
+    box-shadow:
+      0 2px 0 0 #0c0c18,
+      0 3px 0 0 #080812,
+      0 4px 10px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.04),
+      inset 0 -1px 0 rgba(0,0,0,0.2);
+    transform: rotateX(var(--rx, 0deg)) translateY(4px);
+  }
+  .error-key.pressed {
+    transform: rotateX(var(--rx, 0deg)) translateY(5px) scale(0.95);
+    box-shadow:
+      0 1px 0 0 #0c0c18,
+      0 2px 0 0 #080812,
+      0 2px 6px rgba(0,0,0,0.4),
+      inset 0 2px 4px rgba(0,0,0,0.3);
+    color: #a5b4fc;
+  }
+  .error-key.shake {
+    animation: keyShake 0.5s ease;
+  }
+  @keyframes keyShake {
+    0%, 100% { transform: rotateX(var(--rx, 0deg)) rotateZ(0); }
+    20% { transform: rotateX(var(--rx, 0deg)) rotateZ(-8deg) translateX(-4px); }
+    40% { transform: rotateX(var(--rx, 0deg)) rotateZ(6deg) translateX(3px); }
+    60% { transform: rotateX(var(--rx, 0deg)) rotateZ(-4deg) translateX(-2px); }
+    80% { transform: rotateX(var(--rx, 0deg)) rotateZ(2deg) translateX(1px); }
+  }
+
+  .subtitle {
+    font-family: 'Bitcount Prop Single', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 8px;
+  }
+  .desc {
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.35);
+    max-width: 380px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+  }
+
+  .home-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  .home-btn-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    border-radius: 14px;
+    font-family: 'Elms Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.8);
+    background: linear-gradient(180deg, #2e2e42 0%, #1e1e30 40%, #16162a 100%);
+    box-shadow:
+      0 5px 0 0 #0c0c18,
+      0 6px 0 0 #080812,
+      0 8px 16px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.07),
+      inset 0 -1px 0 rgba(0,0,0,0.25);
+    transition: all 0.12s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .home-btn-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+    border-radius: 14px 14px 0 0;
+    pointer-events: none;
+  }
+  .home-btn:hover .home-btn-inner {
+    box-shadow:
+      0 6px 0 0 #0c0c18,
+      0 7px 0 0 #080812,
+      0 10px 28px rgba(99,102,241,0.3),
+      0 10px 16px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.09),
+      inset 0 -1px 0 rgba(0,0,0,0.25);
+    transform: translateY(-2px);
+    color: #fff;
+  }
+  .home-btn:active .home-btn-inner {
+    box-shadow:
+      0 1px 0 0 #0c0c18,
+      0 2px 0 0 #080812,
+      0 2px 8px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.03),
+      inset 0 -1px 0 rgba(0,0,0,0.15);
+    transform: translateY(4px);
+  }
+  .home-btn svg {
+    width: 16px; height: 16px;
+    opacity: 0.5;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .home-btn:hover svg {
+    opacity: 1;
+    transform: translateX(-2px);
+  }
+
+  .hint {
+    margin-top: 48px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.5px;
+  }
+  .hint kbd {
+    display: inline-block;
+    padding: 2px 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    font-family: 'SF Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .burst-particle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #818cf8;
+    pointer-events: none;
+    z-index: 100;
+    animation: burst 0.6s ease-out forwards;
+  }
+  @keyframes burst {
+    0% { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--bx), var(--by)) scale(0); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-keys" id="bg-keys"></div>
+
+<div class="scene">
+  <div class="error-keys">
+    <button class="error-key" style="--rx:-8deg" data-key="4">4</button>
+    <button class="error-key" style="--rx:0deg" data-key="0">0</button>
+    <button class="error-key" style="--rx:8deg" data-key="4">4</button>
+  </div>
+  <div class="subtitle">Page not found</div>
+  <div class="desc">This page doesn't exist. Maybe it was moved, or maybe it never existed at all.</div>
+  <button class="home-btn" onclick="location.href='index.html'">
+    <span class="home-btn-inner">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to KeyLoom
+    </span>
+  </button>
+  <div class="hint">or press <kbd>Esc</kbd> to go back</div>
+</div>
+
+<script>
+(() => {
+  // Floating background keys
+  const KEYS = ['Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M','⌘','⌥','⇧','⇪','⏎','⌫','-tab','ctrl','esc','spc'];
+  const bg = document.getElementById('bg-keys');
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('div');
+    el.className = 'bg-key';
+    el.textContent = KEYS[Math.floor(Math.random() * KEYS.length)];
+    el.style.left = Math.random() * 100 + '%';
+    el.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
+    el.style.animationDuration = (12 + Math.random() * 18) + 's';
+    el.style.animationDelay = (-Math.random() * 20) + 's';
+    el.style.fontSize = (11 + Math.random() * 6) + 'px';
+    bg.appendChild(el);
+  }
+
+  // Error key interactions
+  const keys = document.querySelectorAll('.error-key');
+  const sounds = [220, 330, 440];
+  let audioCtx;
+  function getAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+  function playClick(freq) {
+    try {
+      const ctx = getAudio();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    } catch(e) {}
+  }
+
+  keys.forEach((key, i) => {
+    key.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      key.classList.add('pressed');
+      playClick(sounds[i]);
+      burstParticles(key);
+    });
+    key.addEventListener('mouseup', () => {
+      key.classList.remove('pressed');
+      key.classList.add('shake');
+      setTimeout(() => key.classList.remove('shake'), 500);
+    });
+    key.addEventListener('mouseleave', () => {
+      key.classList.remove('pressed');
+    });
+  });
+
+  // Particle burst on key press
+  function burstParticles(el) {
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const colors = ['#818cf8', '#6366f1', '#a5b4fc', '#c4b5fd', '#fff'];
+    for (let i = 0; i < 8; i++) {
+      const p = document.createElement('div');
+      p.className = 'burst-particle';
+      const angle = (Math.PI * 2 / 8) * i + (Math.random() - 0.5) * 0.5;
+      const dist = 30 + Math.random() * 40;
+      p.style.left = cx + 'px';
+      p.style.top = cy + 'px';
+      p.style.setProperty('--bx', Math.cos(angle) * dist + 'px');
+      p.style.setProperty('--by', Math.sin(angle) * dist + 'px');
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.width = (2 + Math.random() * 4) + 'px';
+      p.style.height = p.style.width;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 600);
+    }
+  }
+
+  // Esc to go back
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (history.length > 1) history.back();
+      else location.href = 'index.html';
+    }
+    // Press matching error key on keyboard
+    const num = e.key;
+    if (['4','0'].includes(num)) {
+      const idx = num === '4' ? (keys[0].classList.contains('pressed') ? 2 : 0) : 1;
+      const key = keys[idx];
+      if (key && !key.classList.contains('pressed')) {
+        key.classList.add('pressed');
+        playClick(sounds[idx]);
+        burstParticles(key);
+        setTimeout(() => {
+          key.classList.remove('pressed');
+          key.classList.add('shake');
+          setTimeout(() => key.classList.remove('shake'), 500);
+        }, 150);
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

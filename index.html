@@ -408,6 +408,7 @@
     flex-direction: column;
     justify-content: center;
     position: relative;
+    overflow: hidden;
   }
   .section-tall {
     min-height: 100vh;
@@ -560,6 +561,9 @@
   .blob-cyan { background: #06b6d4; }
   .blob-green { background: #10b981; }
   .blob-amber { background: #f59e0b; }
+  @media (max-width: 600px) {
+    .blob { transform: scale(0.5); }
+  }
 
   /* === 3D KEYBOARD === */
   .kb3d-controls {
