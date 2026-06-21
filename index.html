@@ -286,8 +286,13 @@
     top: 8px; left: 16px;
     width: 5px; height: 5px;
     border-radius: 50%;
-    background: #4ade80;
+    background: var(--caps-indicator, #4ade80);
     box-shadow: 0 0 8px rgba(74,222,128,0.5), 0 0 20px rgba(74,222,128,0.2);
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .kb-base.caps-on::before {
+    background: #f59e0b;
+    box-shadow: 0 0 8px rgba(245,158,11,0.5), 0 0 20px rgba(245,158,11,0.2);
   }
   .kb-row { display: flex; gap: 5px; margin-bottom: 5px; }
   .kb-row:last-child { margin-bottom: 0; }
@@ -2299,11 +2304,13 @@
 <script>
 (() => {
   const kbBase = document.getElementById('kb-base');
-  if (!kbBase) return;
+  const kb3d = document.getElementById('kb3d');
+  if (!kbBase && !kb3d) return;
   let heroShift = false;
   let heroCaps = false;
 
   function updateHeroKeys() {
+    if (!kbBase) return;
     kbBase.querySelectorAll('.k[data-char]').forEach(k => {
       const ch = k.getAttribute('data-char');
       const sh = k.getAttribute('data-shift');
@@ -2312,42 +2319,67 @@
       const showShift = heroShift || (heroCaps && isLetter);
       k.textContent = showShift ? sh : ch;
     });
+    if (heroCaps) {
+      kbBase.style.setProperty('--caps-indicator', '#f59e0b');
+      kbBase.classList.add('caps-on');
+    } else {
+      kbBase.style.setProperty('--caps-indicator', '#4ade80');
+      kbBase.classList.remove('caps-on');
+    }
   }
+
+  function update3DKeys() {
+    if (!kb3d) return;
+    kb3d.querySelectorAll('.kb3d-key[data-char]').forEach(k => {
+      const ch = k.getAttribute('data-char');
+      const sh = k.getAttribute('data-shift');
+      if (!sh) return;
+      const span = k.querySelector('span');
+      const isLetter = ch.length === 1 && /[a-z]/i.test(ch);
+      const showShift = heroShift || (heroCaps && isLetter);
+      for (const node of k.childNodes) {
+        if (node.nodeType === 3) {
+          node.textContent = showShift ? sh : ch;
+          break;
+        }
+      }
+      if (span) span.textContent = showShift ? ch : sh;
+    });
+  }
+
+  function updateAllKeys() { updateHeroKeys(); update3DKeys(); }
 
   document.addEventListener('keydown', e => {
     if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-      if (!heroShift) { heroShift = true; updateHeroKeys(); }
+      if (!heroShift) { heroShift = true; updateAllKeys(); }
     }
     if (e.code === 'CapsLock') {
       heroCaps = !heroCaps;
       heroShift = false;
-      updateHeroKeys();
+      updateAllKeys();
     }
   });
   document.addEventListener('keyup', e => {
     if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
       heroShift = false;
-      updateHeroKeys();
+      updateAllKeys();
     }
   });
 
-  kbBase.querySelectorAll('.hero-shift-btn').forEach(btn => {
-    btn.addEventListener('click', () => { heroShift = !heroShift; updateHeroKeys(); });
-  });
-  kbBase.querySelectorAll('.hero-caps-btn').forEach(btn => {
-    btn.addEventListener('click', () => { heroCaps = !heroCaps; heroShift = false; updateHeroKeys(); });
-  });
-  kbBase.querySelectorAll('.k[data-char]').forEach(k => {
-    k.addEventListener('click', () => {
-      const ch = k.getAttribute('data-char');
-      const sh = k.getAttribute('data-shift');
-      const isLetter = ch.length === 1 && /[a-z]/i.test(ch);
-      const showShift = heroShift || (heroCaps && isLetter);
-      if (showShift && sh) {
-        if (heroShift && !heroCaps) { heroShift = false; updateHeroKeys(); }
-      }
+  if (kbBase) {
+    kbBase.querySelectorAll('.hero-shift-btn').forEach(btn => {
+      btn.addEventListener('click', () => { heroShift = !heroShift; updateAllKeys(); });
     });
-  });
+    kbBase.querySelectorAll('.hero-caps-btn').forEach(btn => {
+      btn.addEventListener('click', () => { heroCaps = !heroCaps; heroShift = false; updateAllKeys(); });
+    });
+  }
+  if (kb3d) {
+    const capsKey = kb3d.querySelector('[data-key="CapsLock"]');
+    if (capsKey) capsKey.addEventListener('click', () => { heroCaps = !heroCaps; heroShift = false; updateAllKeys(); });
+    const shiftKeys = kb3d.querySelectorAll('[data-key="ShiftLeft"],[data-key="ShiftRight"]');
+    shiftKeys.forEach(btn => btn.addEventListener('click', () => { heroShift = !heroShift; updateAllKeys(); }));
+  }
 })();
 </script>
 
@@ -2425,67 +2457,67 @@
       <div class="kb3d-side-back"></div>
       <!-- Row 1: Number row -->
       <div class="kb3d-row">
-        <div class="kb3d-key kb3d-w15" data-key="Backquote"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>~<span>`</span></div>
-        <div class="kb3d-key" data-key="Digit1"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>!<span>1</span></div>
-        <div class="kb3d-key" data-key="Digit2"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>@<span>2</span></div>
-        <div class="kb3d-key" data-key="Digit3"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>#<span>3</span></div>
-        <div class="kb3d-key" data-key="Digit4"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>$<span>4</span></div>
-        <div class="kb3d-key" data-key="Digit5"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>%<span>5</span></div>
-        <div class="kb3d-key" data-key="Digit6"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>^<span>6</span></div>
-        <div class="kb3d-key" data-key="Digit7"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>&amp;<span>7</span></div>
-        <div class="kb3d-key" data-key="Digit8"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>*<span>8</span></div>
-        <div class="kb3d-key" data-key="Digit9"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>(<span>9</span></div>
-        <div class="kb3d-key" data-key="Digit0"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>)<span>0</span></div>
-        <div class="kb3d-key" data-key="Minus"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>_<span>-</span></div>
-        <div class="kb3d-key" data-key="Equal"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>+<span>=</span></div>
+        <div class="kb3d-key kb3d-w15" data-key="Backquote" data-char="`" data-shift="~"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>`<span>~</span></div>
+        <div class="kb3d-key" data-key="Digit1" data-char="1" data-shift="!"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>1<span>!</span></div>
+        <div class="kb3d-key" data-key="Digit2" data-char="2" data-shift="@"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>2<span>@</span></div>
+        <div class="kb3d-key" data-key="Digit3" data-char="3" data-shift="#"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>3<span>#</span></div>
+        <div class="kb3d-key" data-key="Digit4" data-char="4" data-shift="$"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>4<span>$</span></div>
+        <div class="kb3d-key" data-key="Digit5" data-char="5" data-shift="%"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>5<span>%</span></div>
+        <div class="kb3d-key" data-key="Digit6" data-char="6" data-shift="^"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>6<span>^</span></div>
+        <div class="kb3d-key" data-key="Digit7" data-char="7" data-shift="&amp;"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>7<span>&amp;</span></div>
+        <div class="kb3d-key" data-key="Digit8" data-char="8" data-shift="*"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>8<span>*</span></div>
+        <div class="kb3d-key" data-key="Digit9" data-char="9" data-shift="("><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>9<span>(</span></div>
+        <div class="kb3d-key" data-key="Digit0" data-char="0" data-shift=")"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>0<span>)</span></div>
+        <div class="kb3d-key" data-key="Minus" data-char="-" data-shift="_"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>-<span>_</span></div>
+        <div class="kb3d-key" data-key="Equal" data-char="=" data-shift="+"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>=<span>+</span></div>
         <div class="kb3d-key kb3d-w15 kb3d-fn" data-key="Backspace"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>&#9003;</div>
       </div>
       <!-- Row 2: QWERTY -->
       <div class="kb3d-row">
         <div class="kb3d-key kb3d-w15 kb3d-fn" data-key="Tab"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>&#8633;</div>
-        <div class="kb3d-key" data-key="KeyQ"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>Q</div>
-        <div class="kb3d-key" data-key="KeyW"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>W</div>
-        <div class="kb3d-key" data-key="KeyE"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>E</div>
-        <div class="kb3d-key" data-key="KeyR"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>R</div>
-        <div class="kb3d-key kb3d-broken" data-key="KeyT"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>T</div>
-        <div class="kb3d-key" data-key="KeyY"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>Y</div>
-        <div class="kb3d-key" data-key="KeyU"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>U</div>
-        <div class="kb3d-key" data-key="KeyI"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>I</div>
-        <div class="kb3d-key" data-key="KeyO"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>O</div>
-        <div class="kb3d-key" data-key="KeyP"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>P</div>
-        <div class="kb3d-key" data-key="BracketLeft"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>{<span>[</span></div>
-        <div class="kb3d-key" data-key="BracketRight"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>}<span>]</span></div>
-        <div class="kb3d-key kb3d-w15" data-key="Backslash"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>|<span>\</span></div>
+        <div class="kb3d-key" data-key="KeyQ" data-char="q" data-shift="Q"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>q<span>Q</span></div>
+        <div class="kb3d-key" data-key="KeyW" data-char="w" data-shift="W"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>w<span>W</span></div>
+        <div class="kb3d-key" data-key="KeyE" data-char="e" data-shift="E"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>e<span>E</span></div>
+        <div class="kb3d-key" data-key="KeyR" data-char="r" data-shift="R"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>r<span>R</span></div>
+        <div class="kb3d-key kb3d-broken" data-key="KeyT" data-char="t" data-shift="T"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>t<span>T</span></div>
+        <div class="kb3d-key" data-key="KeyY" data-char="y" data-shift="Y"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>y<span>Y</span></div>
+        <div class="kb3d-key" data-key="KeyU" data-char="u" data-shift="U"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>u<span>U</span></div>
+        <div class="kb3d-key" data-key="KeyI" data-char="i" data-shift="I"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>i<span>I</span></div>
+        <div class="kb3d-key" data-key="KeyO" data-char="o" data-shift="O"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>o<span>O</span></div>
+        <div class="kb3d-key" data-key="KeyP" data-char="p" data-shift="P"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>p<span>P</span></div>
+        <div class="kb3d-key" data-key="BracketLeft" data-char="[" data-shift="{"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>[<span>{</span></div>
+        <div class="kb3d-key" data-key="BracketRight" data-char="]" data-shift="}"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>]<span>}</span></div>
+        <div class="kb3d-key kb3d-w15" data-key="Backslash" data-char="\\" data-shift="|"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>\|</div>
       </div>
       <!-- Row 3: Home row -->
       <div class="kb3d-row">
         <div class="kb3d-key kb3d-w18 kb3d-fn" data-key="CapsLock"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>Caps</div>
-        <div class="kb3d-key" data-key="KeyA"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>A</div>
-        <div class="kb3d-key" data-key="KeyS"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>S</div>
-        <div class="kb3d-key" data-key="KeyD"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>D</div>
-        <div class="kb3d-key" data-key="KeyF"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>F</div>
-        <div class="kb3d-key" data-key="KeyG"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>G</div>
-        <div class="kb3d-key" data-key="KeyH"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>H</div>
-        <div class="kb3d-key" data-key="KeyJ"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>J</div>
-        <div class="kb3d-key" data-key="KeyK"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>K</div>
-        <div class="kb3d-key" data-key="KeyL"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>L</div>
-        <div class="kb3d-key" data-key="Semicolon"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>:<span>;</span></div>
-        <div class="kb3d-key" data-key="Quote"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>"<span>'</span></div>
+        <div class="kb3d-key" data-key="KeyA" data-char="a" data-shift="A"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>a<span>A</span></div>
+        <div class="kb3d-key" data-key="KeyS" data-char="s" data-shift="S"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>s<span>S</span></div>
+        <div class="kb3d-key" data-key="KeyD" data-char="d" data-shift="D"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>d<span>D</span></div>
+        <div class="kb3d-key" data-key="KeyF" data-char="f" data-shift="F"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>f<span>F</span></div>
+        <div class="kb3d-key" data-key="KeyG" data-char="g" data-shift="G"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>g<span>G</span></div>
+        <div class="kb3d-key" data-key="KeyH" data-char="h" data-shift="H"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>h<span>H</span></div>
+        <div class="kb3d-key" data-key="KeyJ" data-char="j" data-shift="J"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>j<span>J</span></div>
+        <div class="kb3d-key" data-key="KeyK" data-char="k" data-shift="K"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>k<span>K</span></div>
+        <div class="kb3d-key" data-key="KeyL" data-char="l" data-shift="L"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>l<span>L</span></div>
+        <div class="kb3d-key" data-key="Semicolon" data-char=";" data-shift=":"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>;:</div>
+        <div class="kb3d-key" data-key="Quote" data-char="'" data-shift="&quot;"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>'<span>"</span></div>
         <div class="kb3d-key kb3d-w18 kb3d-fn" data-key="Enter"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>Enter</div>
       </div>
       <!-- Row 4: Shift row -->
       <div class="kb3d-row">
         <div class="kb3d-key kb3d-w23 kb3d-fn" data-key="ShiftLeft"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>Shift</div>
-        <div class="kb3d-key" data-key="KeyZ"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>Z</div>
-        <div class="kb3d-key" data-key="KeyX"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>X</div>
-        <div class="kb3d-key" data-key="KeyC"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>C</div>
-        <div class="kb3d-key" data-key="KeyV"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>V</div>
-        <div class="kb3d-key kb3d-broken" data-key="KeyB"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>B</div>
-        <div class="kb3d-key" data-key="KeyN"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>N</div>
-        <div class="kb3d-key" data-key="KeyM"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>M</div>
-        <div class="kb3d-key" data-key="Comma"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>&lt;<span>,</span></div>
-        <div class="kb3d-key" data-key="Period"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>&gt;<span>.</span></div>
-        <div class="kb3d-key" data-key="Slash"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>?<span>/</span></div>
+        <div class="kb3d-key" data-key="KeyZ" data-char="z" data-shift="Z"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>z<span>Z</span></div>
+        <div class="kb3d-key" data-key="KeyX" data-char="x" data-shift="X"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>x<span>X</span></div>
+        <div class="kb3d-key" data-key="KeyC" data-char="c" data-shift="C"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>c<span>C</span></div>
+        <div class="kb3d-key" data-key="KeyV" data-char="v" data-shift="V"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>v<span>V</span></div>
+        <div class="kb3d-key kb3d-broken" data-key="KeyB" data-char="b" data-shift="B"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>b<span>B</span></div>
+        <div class="kb3d-key" data-key="KeyN" data-char="n" data-shift="N"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>n<span>N</span></div>
+        <div class="kb3d-key" data-key="KeyM" data-char="m" data-shift="M"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>m<span>M</span></div>
+        <div class="kb3d-key" data-key="Comma" data-char="," data-shift="&lt;"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>,<span>&lt;</span></div>
+        <div class="kb3d-key" data-key="Period" data-char="." data-shift="&gt;"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>.<span>&gt;</span></div>
+        <div class="kb3d-key" data-key="Slash" data-char="/" data-shift="?"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>/<span>?</span></div>
         <div class="kb3d-key kb3d-w23 kb3d-fn" data-key="ShiftRight"><div class="k-face k-top"></div><div class="k-face k-left"></div><div class="k-face k-right"></div><div class="k-face k-bottom"></div><div class="k-face k-back"></div>Shift</div>
       </div>
       <!-- Row 5: Space row -->
