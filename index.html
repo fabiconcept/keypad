@@ -2314,6 +2314,23 @@
     });
   }
 
+  document.addEventListener('keydown', e => {
+    if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+      if (!heroShift) { heroShift = true; updateHeroKeys(); }
+    }
+    if (e.code === 'CapsLock') {
+      heroCaps = !heroCaps;
+      heroShift = false;
+      updateHeroKeys();
+    }
+  });
+  document.addEventListener('keyup', e => {
+    if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+      heroShift = false;
+      updateHeroKeys();
+    }
+  });
+
   kbBase.querySelectorAll('.hero-shift-btn').forEach(btn => {
     btn.addEventListener('click', () => { heroShift = !heroShift; updateHeroKeys(); });
   });
