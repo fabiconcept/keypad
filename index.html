@@ -2263,31 +2263,31 @@
     </svg>
     <div class="kb-base" id="kb-base">
       <div class="kb-row">
-        <div class="k">`</div><div class="k">1</div><div class="k">2</div><div class="k">3</div>
-        <div class="k">4</div><div class="k">5</div><div class="k">6</div><div class="k">7</div>
-        <div class="k">8</div><div class="k">9</div><div class="k">0</div><div class="k">-</div>
-        <div class="k">=</div><div class="k fn w15">BK</div>
+        <div class="k" data-char="`" data-shift="~">`</div><div class="k" data-char="1" data-shift="!">1</div><div class="k" data-char="2" data-shift="@">2</div><div class="k" data-char="3" data-shift="#">3</div>
+        <div class="k" data-char="4" data-shift="$">4</div><div class="k" data-char="5" data-shift="%">5</div><div class="k" data-char="6" data-shift="^">6</div><div class="k" data-char="7" data-shift="&">7</div>
+        <div class="k" data-char="8" data-shift="*">8</div><div class="k" data-char="9" data-shift="(">9</div><div class="k" data-char="0" data-shift=")">0</div><div class="k" data-char="-" data-shift="_">-</div>
+        <div class="k" data-char="=" data-shift="+">=</div><div class="k fn w15">BK</div>
       </div>
       <div class="kb-row">
         <div class="k fn w15">TAB</div>
-        <div class="k">q</div><div class="k">w</div><div class="k">e</div><div class="k">r</div>
-        <div class="k broken">t</div><div class="k">y</div><div class="k">u</div>
-        <div class="k">i</div><div class="k">o</div><div class="k">p</div>
-        <div class="k">[</div><div class="k">]</div><div class="k">\</div>
+        <div class="k" data-char="q" data-shift="Q">q</div><div class="k" data-char="w" data-shift="W">w</div><div class="k" data-char="e" data-shift="E">e</div><div class="k" data-char="r" data-shift="R">r</div>
+        <div class="k broken" data-char="t" data-shift="T">t</div><div class="k" data-char="y" data-shift="Y">y</div><div class="k" data-char="u" data-shift="U">u</div>
+        <div class="k" data-char="i" data-shift="I">i</div><div class="k" data-char="o" data-shift="O">o</div><div class="k" data-char="p" data-shift="P">p</div>
+        <div class="k" data-char="[" data-shift="{">[</div><div class="k" data-char="]" data-shift="}">]</div><div class="k" data-char="\\" data-shift="|">\</div>
       </div>
       <div class="kb-row">
-        <div class="k fn w18">CAP</div>
-        <div class="k">a</div><div class="k">s</div><div class="k">d</div><div class="k">f</div>
-        <div class="k">g</div><div class="k">h</div><div class="k">j</div>
-        <div class="k">k</div><div class="k">l</div><div class="k">;</div><div class="k">'</div>
+        <div class="k fn w18 hero-caps-btn">CAP</div>
+        <div class="k" data-char="a" data-shift="A">a</div><div class="k" data-char="s" data-shift="S">s</div><div class="k" data-char="d" data-shift="D">d</div><div class="k" data-char="f" data-shift="F">f</div>
+        <div class="k" data-char="g" data-shift="G">g</div><div class="k" data-char="h" data-shift="H">h</div><div class="k" data-char="j" data-shift="J">j</div>
+        <div class="k" data-char="k" data-shift="K">k</div><div class="k" data-char="l" data-shift="L">l</div><div class="k" data-char=";" data-shift=":">;</div><div class="k" data-char="'" data-shift='"'>'</div>
         <div class="k fn w18">RET</div>
       </div>
       <div class="kb-row">
-        <div class="k fn w23">SHIFT</div>
-        <div class="k">z</div><div class="k">x</div><div class="k">c</div><div class="k">v</div>
-        <div class="k broken">b</div><div class="k">n</div><div class="k">m</div>
-        <div class="k">,</div><div class="k">.</div><div class="k">/</div>
-        <div class="k fn w23">SHIFT</div>
+        <div class="k fn w23 hero-shift-btn">SHIFT</div>
+        <div class="k" data-char="z" data-shift="Z">z</div><div class="k" data-char="x" data-shift="X">x</div><div class="k" data-char="c" data-shift="C">c</div><div class="k" data-char="v" data-shift="V">v</div>
+        <div class="k broken" data-char="b" data-shift="B">b</div><div class="k" data-char="n" data-shift="N">n</div><div class="k" data-char="m" data-shift="M">m</div>
+        <div class="k" data-char="," data-shift="<">,</div><div class="k" data-char="." data-shift=">">.</div><div class="k" data-char="/" data-shift="?">/</div>
+        <div class="k fn w23 hero-shift-btn">SHIFT</div>
       </div>
       <div class="kb-row">
         <div class="k fn wsp" style="font-size:12px;letter-spacing:1px;">space</div>
@@ -2295,6 +2295,44 @@
     </div>
   </div>
 </div>
+
+<script>
+(() => {
+  const kbBase = document.getElementById('kb-base');
+  if (!kbBase) return;
+  let heroShift = false;
+  let heroCaps = false;
+
+  function updateHeroKeys() {
+    kbBase.querySelectorAll('.k[data-char]').forEach(k => {
+      const ch = k.getAttribute('data-char');
+      const sh = k.getAttribute('data-shift');
+      if (!sh) return;
+      const isLetter = ch.length === 1 && /[a-z]/i.test(ch);
+      const showShift = heroShift || (heroCaps && isLetter);
+      k.textContent = showShift ? sh : ch;
+    });
+  }
+
+  kbBase.querySelectorAll('.hero-shift-btn').forEach(btn => {
+    btn.addEventListener('click', () => { heroShift = !heroShift; updateHeroKeys(); });
+  });
+  kbBase.querySelectorAll('.hero-caps-btn').forEach(btn => {
+    btn.addEventListener('click', () => { heroCaps = !heroCaps; heroShift = false; updateHeroKeys(); });
+  });
+  kbBase.querySelectorAll('.k[data-char]').forEach(k => {
+    k.addEventListener('click', () => {
+      const ch = k.getAttribute('data-char');
+      const sh = k.getAttribute('data-shift');
+      const isLetter = ch.length === 1 && /[a-z]/i.test(ch);
+      const showShift = heroShift || (heroCaps && isLetter);
+      if (showShift && sh) {
+        if (heroShift && !heroCaps) { heroShift = false; updateHeroKeys(); }
+      }
+    });
+  });
+})();
+</script>
 
 <div class="wire-divider reveal">
   <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
