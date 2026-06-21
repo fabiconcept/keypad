@@ -177,7 +177,7 @@ struct KeyboardView: View {
 
     func handleKey(_ key: Key) {
         usageTracker.recordUse(key.label)
-        SoundManager.shared.playKeyPress()
+        SoundManager.shared.playKeyPress(keyLabel: key.label)
         switch key.type {
         case .character:
             let useShift = keyboardState.isShifted || (keyboardState.isCaps && key.label.count == 1 && key.label.first?.isLetter == true)
