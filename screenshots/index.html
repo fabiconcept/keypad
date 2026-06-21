@@ -142,6 +142,7 @@
     border-radius: 14px;
     padding: 0;
     cursor: pointer;
+    text-decoration: none;
     box-shadow:
       0 6px 0 0 #0c0c18,
       0 8px 0 0 #080812,
@@ -2015,6 +2016,8 @@
     border-radius: 40px;
     padding: 8px 18px;
     cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
     transition: all 0.2s ease;
     box-shadow: 0 2px 0 0 #3730a3, inset 0 1px 0 rgba(255,255,255,0.1);
     white-space: nowrap;
@@ -3885,6 +3888,7 @@ document.addEventListener('DOMContentLoaded', () => {
         p.oy = p.y;
         p.x += vx + (Math.random() - 0.5) * 0.06;
         p.y += vy + GRAVITY;
+        if (!isFinite(p.x) || !isFinite(p.y)) { p.x = CENTER_X; p.y = (HEIGHT / SEGMENTS) * i; p.ox = p.x; p.oy = p.y; }
       }
       points[0].x = CENTER_X; points[0].y = 0;
       points[SEGMENTS].x = CENTER_X; points[SEGMENTS].y = HEIGHT;
@@ -3892,7 +3896,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < SEGMENTS; i++) {
           const a = points[i], b = points[i + 1];
           const dx = b.x - a.x, dy = b.y - a.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const dist = Math.sqrt(dx * dx + dy * dy) || 0.001;
           const diff = (1 - dist) * SPREAD * 0.5;
           const ox = dx * diff, oy = dy * diff;
           if (!(dragging && i === 0)) { a.x -= ox; a.y -= oy; }
@@ -3908,9 +3912,13 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let i = 1; i <= SEGMENTS; i++) {
         const prev = points[i - 1];
         const curr = points[i];
-        const mx = (prev.x + curr.x) / 2;
-        const my = (prev.y + curr.y) / 2;
-        d += ` Q${prev.x.toFixed(1)},${prev.y.toFixed(1)} ${mx.toFixed(1)},${my.toFixed(1)}`;
+        const px = isFinite(prev.x) ? prev.x : CENTER_X;
+        const py = isFinite(prev.y) ? prev.y : (HEIGHT / SEGMENTS) * (i - 1);
+        const cx = isFinite(curr.x) ? curr.x : CENTER_X;
+        const cy = isFinite(curr.y) ? curr.y : (HEIGHT / SEGMENTS) * i;
+        const mx = (px + cx) / 2;
+        const my = (py + cy) / 2;
+        d += ` Q${px.toFixed(1)},${py.toFixed(1)} ${mx.toFixed(1)},${my.toFixed(1)}`;
       }
       return d;
     }
