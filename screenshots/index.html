@@ -3000,7 +3000,8 @@
       keyEl.addEventListener('mousedown', () => {
         keyEl.classList.add('kb3d-active');
         typeKey(code);
-        playKeySound(300 + Math.random() * 200);
+        const ch = keyEl.getAttribute('data-char') || keyEl.textContent.trim().toLowerCase();
+        playKeySound(ch);
       });
       keyEl.addEventListener('mouseup', () => {
         keyEl.classList.remove('kb3d-active');
@@ -3021,7 +3022,8 @@
       const key = kb3d.querySelector(`[data-key="${e.code}"]`);
       if (key) {
         key.classList.add('kb3d-active');
-        playKeySound(320 + Math.random() * 160);
+        const ch = key.getAttribute('data-char') || key.textContent.trim().toLowerCase();
+        playKeySound(ch);
         // Also type into output if visible
         const out = document.getElementById('kb3d-output');
         if (out && out.style.display !== 'none') {
@@ -3268,14 +3270,31 @@
     requestAnimationFrame(loop);
   })();
 
-  // ── Keyboard Sound System ─────────────────────────────────────
+  // ── Keyboard Sound System (DRMFSLTD) ──────────────────────────
+  const NOTE_FREQS = {
+    do: 261.63, re: 293.66, mi: 329.63, fa: 349.23,
+    sol: 392.00, la: 440.00, ti: 493.88, do2: 523.25
+  };
+  const KEY_NOTE_MAP = {
+    'q':'do','w':'re','e':'mi','r':'fa','t':'sol','y':'la','u':'ti','i':'do2',
+    'a':'do','s':'re','d':'mi','f':'fa','g':'sol','h':'la','j':'ti','k':'do2',
+    'z':'do','x':'re','c':'mi','v':'fa','b':'sol','n':'la','m':'ti',
+    '1':'do','2':'re','3':'mi','4':'fa','5':'sol','6':'la','7':'ti','8':'do2',
+    '9':'do','0':'re','-':'mi','=':'fa',
+    '[':'sol',']':'la','\\':'ti',
+    ';':'do2',',':'re','.':'mi','/':'fa',
+    '`':'do'
+  };
+
   let _audioCtx;
   function getAudioCtx() {
     if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     return _audioCtx;
   }
-  function playKeySound(freq) {
+  function playKeySound(keyChar) {
     try {
+      const note = KEY_NOTE_MAP[keyChar] || 'do';
+      const freq = NOTE_FREQS[note] || 261.63;
       const ctx = getAudioCtx();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -3293,7 +3312,8 @@
   document.querySelectorAll('.k').forEach(key => {
     key.addEventListener('mousedown', () => {
       key.classList.add('pressed');
-      playKeySound(280 + Math.random() * 180);
+      const ch = key.getAttribute('data-char') || key.textContent.trim().toLowerCase();
+      playKeySound(ch);
     });
     key.addEventListener('mouseup', () => key.classList.remove('pressed'));
     key.addEventListener('mouseleave', () => key.classList.remove('pressed'));
