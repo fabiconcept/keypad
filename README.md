@@ -128,35 +128,24 @@ All customization is available through the Settings panel (gear icon in the head
 
 ### "KeyLoom is damaged and can't be opened"
 
-This happens when macOS Gatekeeper blocks unsigned apps downloaded from the internet. The app needs to be signed with a Developer ID certificate and notarized by Apple.
+This happens because KeyLoom isn't signed with an Apple Developer ID certificate. macOS blocks unsigned apps downloaded from the internet.
 
-**Quick fix (for users):**
+**Workaround 1: Right-click to open**
+1. Right-click (or Control-click) `KeyLoom.app`
+2. Select **Open** from the context menu
+3. Click **Open** in the dialog
+
+**Workaround 2: Allow in System Settings**
+1. Try to open KeyLoom (it will show the "damaged" error)
+2. Open **System Settings > Privacy & Security**
+3. Scroll down — you'll see a message about KeyLoom being blocked
+4. Click **Open Anyway**
+
+**Workaround 3: Remove quarantine via Terminal**
 ```bash
 xattr -cr /Applications/KeyLoom.app
 ```
-Then open KeyLoom normally.
-
-**Permanent fix (for developers):**
-Requires an [Apple Developer Program](https://developer.apple.com/programs/) membership ($99/year). Once enrolled:
-
-1. Generate an app-specific password at [appleid.apple.com](https://appleid.apple.com) under "Sign-In and Security"
-2. Add these GitHub secrets to your repository (Settings > Secrets and variables > Actions):
-
-| Secret | How to get it |
-|--------|---------------|
-| `APPLE_CERTIFICATE` | Export your "Developer ID Application" certificate as `.p12`, then `base64 -i cert.p12` |
-| `APPLE_CERTIFICATE_PWD` | Password you set when exporting the `.p12` |
-| `APPLE_TEAM_ID` | Found at [developer.apple.com/account](https://developer.apple.com/account) under Membership Details |
-| `APPLE_ID` | Your Apple ID email |
-| `AC_PASSWORD` | App-specific password from appleid.apple.com |
-
-3. Push a tag to trigger the release workflow:
-```bash
-fastlane bump version:1.2.0
-git push origin main --tags
-```
-
-The workflow will automatically sign, notarize, staple, and publish a trusted DMG.
+If that doesn't work (macOS may re-apply it), use Workaround 1 or 2.
 
 ### Accessibility permission denied
 
