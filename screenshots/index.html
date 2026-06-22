@@ -15,18 +15,63 @@
 <meta property="og:image" content="https://keyloom.app/screenshots/final/hero.png">
 <meta property="og:url" content="https://keyloom.app/">
 <meta property="og:site_name" content="KeyLoom">
+<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="KeyLoom - Floating Virtual Keyboard for macOS">
 <meta name="twitter:description" content="A floating virtual keyboard for macOS. Customizable, always on top, with clipboard history, quick keys, and 6 sound styles.">
 <meta name="twitter:image" content="https://keyloom.app/screenshots/final/hero.png">
 <meta name="twitter:creator" content="@fabiconcept">
+<meta name="twitter:site" content="@fabiconcept">
 <meta name="theme-color" content="#0d0d15">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "KeyLoom",
+  "operatingSystem": "macOS",
+  "applicationCategory": "UtilitiesApplication",
+  "description": "A floating virtual keyboard for macOS. Type into any app with automatic Cmd+V paste. Features clipboard history, broken keys, quick keys, and 6 sound styles.",
+  "url": "https://keyloom.app/",
+  "downloadUrl": "https://github.com/fabiconcept/keyloom",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Fabiconcept",
+    "url": "https://github.com/fabiconcept"
+  }
+}
+</script>
 <link rel="icon" type="image/png" href="final/icon_256x256.png">
+<link rel="apple-touch-icon" href="final/icon_256x256.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Elms+Sans:wght@400;500;600;700&family=Bitcount+Prop+Single:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Elms+Sans:wght@400;500;600;700&family=Bitcount+Prop+Single:wght@400;700&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  .skip-to-content {
+    position: absolute;
+    top: -100%;
+    left: 16px;
+    z-index: 9999;
+    padding: 8px 16px;
+    background: #6366f1;
+    color: #fff;
+    border-radius: 0 0 8px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: top 0.2s;
+  }
+  .skip-to-content:focus {
+    top: 0;
+  }
   body {
     font-family: 'Elms Sans', sans-serif;
     background: #0d0d15;
@@ -414,7 +459,6 @@
     flex-direction: column;
     justify-content: center;
     position: relative;
-    overflow: hidden;
   }
   .section-tall {
     min-height: 100vh;
@@ -1318,6 +1362,11 @@
     gap: 10px;
     padding: 16px;
   }
+  #screenshots.section {
+    max-width: 1200px;
+    padding-left: 0;
+    padding-right: 0;
+  }
   .ss-item {
     border-radius: 8px;
     overflow: hidden;
@@ -1369,7 +1418,7 @@
 
   /* Settings panel - tray-perspective */
   .tray-perspective {
-    max-width: 1060px;
+    max-width: 1200px;
     margin: 0 auto;
     perspective: 900px;
     overflow: hidden;
@@ -1860,7 +1909,7 @@
     .kb-row { gap: 3px; margin-bottom: 3px; }
     .k { height: 32px; font-size: 11px; border-radius: 5px; }
     .k.fn { font-size: 9px; }
-    .section { padding: 60px 16px; min-height: auto; }
+    .section { padding: 60px 16px; min-height: auto; overflow: hidden; }
     .section-title { font-size: 16px; margin-bottom: 16px; }
     .kb3d-keyboard { width: 100%; transform: rotateX(12deg) scale(0.85); }
     .kb3d-key { font-size: 9px; padding: 3px 0 0 4px; }
@@ -2208,9 +2257,22 @@
       cursor: grabbing;
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .reveal, .reveal-up, .reveal-scale {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-to-content">Skip to content</a>
 <div class="bg-keys" id="bg-keys"></div>
 
 <!-- NAVBAR -->
@@ -2226,7 +2288,7 @@
     <li><a href="#screenshots">Screenshots</a></li>
   </ul>
   <div class="nav-sep"></div>
-  <a class="nav-cta" href="https://github.com/fabiconcept/keyloom" target="_blank" rel="noopener">Get App</a>
+    <a class="nav-cta" href="https://github.com/fabiconcept/keyloom" target="_blank" rel="noopener">Download KeyLoom</a>
   <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -2237,7 +2299,7 @@
     <a href="#settings">Settings</a>
     <a href="#hidden">Hidden</a>
     <a href="#screenshots">Screenshots</a>
-    <a href="https://github.com/fabiconcept/keyloom" target="_blank">Get App</a>
+    <a href="https://github.com/fabiconcept/keyloom" target="_blank" rel="noopener">Download KeyLoom</a>
   </div>
 </nav>
 
@@ -2248,18 +2310,18 @@
     <circle id="hang-anchor-outer" class="floating-hang-anchor-outer" r="7" fill="#333" stroke="#555" stroke-width="2"/>
     <circle id="hang-anchor-inner" class="floating-hang-anchor-inner" r="3" fill="#B4B2A9"/>
   </svg>
-  <img src="final/hero.png" alt="" class="floating-hang-img" id="floating-hang-img">
+  <img src="final/hero.png" alt="KeyLoom floating virtual keyboard hanging from a rope on macOS" class="floating-hang-img" id="floating-hang-img" width="280" height="200" fetchpriority="high">
 </div>
 
 <!-- HERO -->
-<div class="hero reveal-up">
+<header class="hero reveal-up" id="hero">
   <h1 class="hero-title" id="hero-title">KeyLoom</h1>
   <p class="hero-sub reveal stagger-2">A floating virtual keyboard for macOS. Type into any app with automatic Cmd+V paste.</p>
   <div class="hero-cta reveal stagger-3">
     <a class="pushable" href="https://github.com/fabiconcept/keyloom" target="_blank" rel="noopener">
       <span class="front">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><line x1="6" y1="8" x2="6.01" y2="8"/><line x1="10" y1="8" x2="10.01" y2="8"/><line x1="14" y1="8" x2="14.01" y2="8"/><line x1="18" y1="8" x2="18.01" y2="8"/><line x1="6" y1="12" x2="6.01" y2="12"/><line x1="10" y1="12" x2="10.01" y2="12"/><line x1="14" y1="12" x2="14.01" y2="12"/><line x1="18" y1="12" x2="18.01" y2="12"/><line x1="8" y1="16" x2="16" y2="16"/></svg>
-        Get Application
+        Download KeyLoom
       </span>
     </a>
   </div>
@@ -2302,7 +2364,7 @@
       </div>
     </div>
   </div>
-</div>
+</header>
 
 <div class="wire-divider reveal">
   <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
@@ -2313,10 +2375,10 @@
 </div>
 
 <!-- FEATURES -->
-<div id="features" class="section reveal">
+<section id="features" class="section reveal">
   <div class="blob blob-purple" data-speed="0.4" style="width:300px;height:300px;top:-80px;right:-100px;"></div>
   <div class="blob blob-cyan" data-speed="-0.3" style="width:200px;height:200px;bottom:-60px;left:-80px;"></div>
-  <div class="section-title"><span class="dot"></span>Features</div>
+  <h2 class="section-title"><span class="dot"></span>Features</h2>
   <p class="section-desc reveal stagger-1">Everything you need for quick and efficient text input, built into one lightweight tool that stays out of your way until you need it.</p>
   <div class="features-grid">
     <div class="feat reveal stagger-1"><div class="feat-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="3"/><line x1="6" y1="8" x2="18" y2="8"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="6" y1="16" x2="12" y2="16"/></svg></div><h3>Floating Panel</h3><p>Sits above all windows. Works in every space.</p></div>
@@ -2326,11 +2388,11 @@
     <div class="feat reveal stagger-5"><div class="feat-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><h3>6 Sound Styles</h3><p>Key Click, Soft, Mechanical, Glass, Minimal, Bottle.</p></div>
     <div class="feat reveal stagger-6"><div class="feat-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 3a2.85 2.85 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><line x1="15" y1="5" x2="19" y2="9"/></svg></div><h3>Physical Sync</h3><p>Shift and Caps Lock follow your real keyboard.</p></div>
   </div>
-</div>
+</section>
 
 <!-- HOW IT WORKS -->
-<div id="how-it-works" class="section reveal">
-  <div class="section-title"><span class="dot"></span>How It Works</div>
+<section id="how-it-works" class="section reveal">
+  <h2 class="section-title"><span class="dot"></span>How It Works</h2>
   <p class="section-desc reveal stagger-1">KeyLoom runs as a menu bar app. Click the icon to toggle the floating keyboard on or off.</p>
   <div class="guide-grid">
     <div class="guide-card reveal stagger-2">
@@ -2350,7 +2412,7 @@
       </ul>
     </div>
   </div>
-</div>
+</section>
 
 <div class="wire-divider reveal">
   <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
@@ -2361,8 +2423,8 @@
 </div>
 
 <!-- KEYBOARD -->
-<div id="keyboard" class="section section-tall reveal">
-  <div class="section-title"><span class="dot"></span>Keyboard</div>
+<section id="keyboard" class="section section-tall reveal">
+  <h2 class="section-title"><span class="dot"></span>Keyboard</h2>
   <p class="section-desc reveal stagger-1">A full QWERTY layout rendered in 3D, right on your screen. Every key is clickable, and the keyboard responds to your physical key presses in real time. Rotate and explore it below.</p>
   <div class="kb3d-controls reveal stagger-2">
     <button class="kb3d-btn" id="kb3d-up" title="Rotate up">&#9650;</button>
@@ -2458,7 +2520,7 @@
     </div>
     <div class="kb3d-output-text" id="kb3d-output" contenteditable="true" spellcheck="false" style="display:none;"></div>
   </div>
-</div>
+</section>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -2574,7 +2636,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- SETTINGS GUIDE -->
 <div id="settings" class="section reveal">
-  <div class="section-title"><span class="dot"></span>Settings Guide</div>
+  <h2 class="section-title"><span class="dot"></span>Settings Guide</h2>
   <p class="section-desc reveal stagger-1">Click the gear icon in the menu bar. Everything is organized into five tabs.</p>
   <div class="guide-grid">
     <div class="guide-card reveal stagger-2">
@@ -2623,7 +2685,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </ul>
     </div>
   </div>
-</div>
+</section>
 
 <div class="wire-divider reveal">
   <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
@@ -2634,8 +2696,8 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <!-- HIDDEN FEATURES -->
-<div id="hidden" class="section reveal">
-  <div class="section-title"><span class="dot"></span>Hidden Features</div>
+<section id="hidden" class="section reveal">
+  <h2 class="section-title"><span class="dot"></span>Hidden Features</h2>
   <p class="section-desc reveal stagger-1">KeyLoom has a few tricks you might not discover on your own. These are power-user features built right in.</p>
   <div class="guide-grid">
     <div class="guide-card reveal stagger-2">
@@ -2663,7 +2725,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <p>Every text you type through KeyLoom is automatically saved to clipboard history. You can search past entries, pin important ones, and export everything as a text file from the Settings panel.</p>
     </div>
   </div>
-</div>
+</section>
 
 <div class="wire-divider reveal">
   <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
@@ -2674,10 +2736,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <!-- SCREENSHOTS -->
-<div id="screenshots" class="section reveal">
+<section id="screenshots" class="reveal">
   <div class="blob blob-green" data-speed="0.45" style="width:280px;height:280px;top:-50px;left:10%;"></div>
   <div class="blob blob-blue" data-speed="-0.4" style="width:220px;height:220px;bottom:-40px;right:5%;"></div>
-  <div class="section-title"><span class="dot"></span>Screenshots</div>
+  <h2 class="section-title"><span class="dot"></span>Screenshots</h2>
   <p class="section-desc reveal stagger-1">A closer look at every corner of KeyLoom. From the keyboard layout to the settings panel, everything is designed to feel native to macOS.</p>
   <div class="tray-perspective reveal-scale stagger-2">
     <div class="tray-lid">
@@ -2693,19 +2755,19 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="tray-surface" style="height:auto;opacity:1;overflow:visible;">
       <div class="ss-gallery">
         <!-- Keyboard items -->
-        <div class="ss-item active" data-ss="1"><img src="final/keyboard.png" alt="Keyboard"></div>
-        <div class="ss-item active" data-ss="1"><img src="final/quick-keys.png" alt="Quick Keys"></div>
-        <div class="ss-item active" data-ss="1"><img src="final/clipboard.png" alt="Clipboard"></div>
+        <div class="ss-item active" data-ss="1"><img src="final/keyboard.png" alt="KeyLoom full QWERTY keyboard layout on macOS" width="400" height="300"></div>
+        <div class="ss-item active" data-ss="1"><img src="final/quick-keys.png" alt="KeyLoom quick keys shortcut strip" width="400" height="300"></div>
+        <div class="ss-item active" data-ss="1"><img src="final/clipboard.png" alt="KeyLoom clipboard history panel" width="400" height="300"></div>
         <!-- Settings items -->
-        <div class="ss-item active" data-ss="2"><img src="final/settings-layout.png" alt="Settings Layout"></div>
-        <div class="ss-item active" data-ss="2"><img src="final/settings-style.png" alt="Settings Style"></div>
-        <div class="ss-item active" data-ss="2"><img src="final/settings-behavior.png" alt="Settings Behavior"></div>
-        <div class="ss-item active" data-ss="2"><img src="final/settings-clipboard.png" alt="Settings Clipboard"></div>
-        <div class="ss-item active" data-ss="2"><img src="final/settings-sounds.png" alt="Settings Sounds"></div>
+        <div class="ss-item active" data-ss="2"><img src="final/settings-layout.png" alt="KeyLoom settings layout tab" width="400" height="300"></div>
+        <div class="ss-item active" data-ss="2"><img src="final/settings-style.png" alt="KeyLoom settings style tab" width="400" height="300"></div>
+        <div class="ss-item active" data-ss="2"><img src="final/settings-behavior.png" alt="KeyLoom settings behavior tab" width="400" height="300"></div>
+        <div class="ss-item active" data-ss="2"><img src="final/settings-clipboard.png" alt="KeyLoom settings clipboard tab" width="400" height="300"></div>
+        <div class="ss-item active" data-ss="2"><img src="final/settings-sounds.png" alt="KeyLoom settings sounds tab" width="400" height="300"></div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
 <div class="wire-divider reveal">
   <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
@@ -2716,10 +2778,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <!-- VIDEO -->
-<div class="section reveal-up" style="padding-top:80px; padding-bottom:80px; overflow:hidden;">
+<section class="section reveal-up" style="padding-top:80px; padding-bottom:80px; overflow:hidden;">
   <div class="blob blob-pink" data-speed="-0.5" style="width:350px;height:350px;top:10%;left:-120px;"></div>
   <div class="blob blob-amber" data-speed="0.35" style="width:250px;height:250px;bottom:5%;right:-80px;"></div>
-  <div class="section-title"><span class="dot"></span>See It in Action</div>
+  <h2 class="section-title"><span class="dot"></span>See It in Action</h2>
   <p class="section-desc reveal stagger-1">Watch KeyLoom in real use. See how the floating keyboard integrates seamlessly into your macOS workflow without getting in the way.</p>
   <div class="tray-perspective reveal-scale stagger-2">
     <div class="tray-lid">
@@ -2732,6 +2794,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="kb-video-player" id="kb-video-player" tabindex="0">
           <video class="kb-video" id="kb-video" preload="metadata" playsinline loop>
             <source src="short-clip.MOV" type="video/mp4">
+            <track kind="captions" label="English" srclang="en" src="captions.vtt" default>
           </video>
 
           <!-- Center overlay -->
@@ -2816,7 +2879,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
   </div>
-</div>
+</section>
 
 <div class="wire-divider reveal">
   <svg class="rope-svg" viewBox="0 0 20 60" preserveAspectRatio="none">
@@ -2827,11 +2890,11 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <!-- FOOTER -->
-<div class="footer reveal">
+<footer class="footer reveal">
   <div class="footer-logo" id="footer-logo">KeyLoom</div>
-  <div class="footer-sub reveal stagger-1">Designed by <a href="https://github.com/fabiconcept/keyloom" target="_blank" style="color:#818cf8;text-decoration:none;">Fabiconcept</a></div>
+  <div class="footer-sub reveal stagger-1">Designed by <a href="https://github.com/fabiconcept/keyloom" target="_blank" rel="noopener" style="color:#818cf8;text-decoration:none;">Fabiconcept</a></div>
   <div class="footer-cards reveal stagger-2">
-    <a href="https://github.com/fabiconcept/keyloom" target="_blank" class="footer-card">
+    <a href="https://github.com/fabiconcept/keyloom" target="_blank" rel="noopener" class="footer-card">
       <span class="footer-card-inner">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
         GitHub
@@ -2852,7 +2915,7 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
   <div class="footer-divider reveal stagger-3"></div>
   <div class="footer-copy reveal stagger-4">&copy; 2026 KeyLoom. All rights reserved.</div>
-</div>
+</footer>
 
 <!-- PHOTO VIEWER -->
 <div class="viewer-overlay" id="viewer">
