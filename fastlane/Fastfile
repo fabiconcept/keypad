@@ -83,15 +83,19 @@ platform :mac do
 
   desc "Bump version and commit"
   lane :bump do |options|
+    version = options[:version]
+    unless version =~ /\A\d+\.\d+\.\d+\z/
+      UI.user_error!("Invalid version format: '#{version}'. Expected semver (e.g. 1.2.3)")
+    end
     increment_version_number_in_plist(
       target: "KeyLoom",
-      version_number: options[:version]
+      version_number: version
     )
     increment_build_number_in_plist(
       target: "KeyLoom"
     )
     sh "git add KeyLoom/Info.plist KeyLoom.xcodeproj/project.pbxproj"
-    sh "git commit -m 'chore: bump version to #{options[:version]}'"
-    sh "git tag 'v#{options[:version]}'"
+    sh "git commit -m 'chore: bump version to #{version}'"
+    sh "git tag 'v#{version}'"
   end
 end

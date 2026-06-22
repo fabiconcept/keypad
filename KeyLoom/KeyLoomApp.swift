@@ -92,9 +92,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func showAbout() {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
         let alert = NSAlert()
         alert.messageText = "KeyLoom"
-        alert.informativeText = "Version 1.0.0\n\nA floating virtual keyboard for macOS.\nType directly into any app with clipboard paste.\n\nDesigned by Fabiconcept (Zayn Favour Ajokubi)\nfavourajokubi@gmail.com\n\n© 2026 Fabiconcept. All rights reserved."
+        alert.informativeText = "Version \(version) (\(build))\n\nA floating virtual keyboard for macOS.\nType directly into any app with clipboard paste.\n\nDesigned by Fabiconcept (Zayn Favour Ajokubi)\nfavourajokubi@gmail.com\n\n© 2026 Fabiconcept. All rights reserved."
         alert.alertStyle = .informational
         alert.addButton(withTitle: "OK")
         alert.icon = NSImage(systemSymbolName: "keyboard", accessibilityDescription: nil)
@@ -201,4 +203,26 @@ func openSettings() {
     window.makeKeyAndOrderFront(nil)
     NSApp.activate(ignoringOtherApps: true)
     settingsWindow = window
+}
+
+struct AppVersion {
+    let major: Int
+    let minor: Int
+    let patch: Int
+    let build: String
+
+    static let current: AppVersion = {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+        let parts = version.split(separator: ".").compactMap { Int($0) }
+        return AppVersion(
+            major: parts.indices.contains(0) ? parts[0] : 1,
+            minor: parts.indices.contains(1) ? parts[1] : 0,
+            patch: parts.indices.contains(2) ? parts[2] : 0,
+            build: build
+        )
+    }()
+
+    var short: String { "\(major).\(minor).\(patch)" }
+    var display: String { "\(short) (\(build))" }
 }
