@@ -368,7 +368,7 @@ func showWelcome() {
     panel.hidesOnDeactivate = false
     panel.contentView?.translatesAutoresizingMaskIntoConstraints = false
 
-    let hostingView = NSHostingView(rootView: WelcomeGuide())
+    let hostingView = NSHostingView(rootView: WelcomeGuide().tint(.accentColor))
     hostingView.translatesAutoresizingMaskIntoConstraints = false
     panel.contentView = hostingView
 
@@ -413,7 +413,7 @@ func showHelp() {
     panel.hidesOnDeactivate = false
     panel.contentView?.translatesAutoresizingMaskIntoConstraints = false
 
-    let hostingView = NSHostingView(rootView: HelpGuide())
+    let hostingView = NSHostingView(rootView: HelpGuide().tint(.accentColor))
     hostingView.translatesAutoresizingMaskIntoConstraints = false
     panel.contentView = hostingView
 

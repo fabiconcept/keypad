@@ -222,7 +222,7 @@ func openCollapsedPanel() {
     panel.contentView?.layer?.borderWidth = 0
     panel.contentView?.layer?.borderColor = NSColor.clear.cgColor
 
-    let hostingView = NSHostingView(rootView: CollapsedKeyboardView())
+    let hostingView = NSHostingView(rootView: CollapsedKeyboardView().tint(.accentColor))
     panel.contentView = hostingView
 
     if let savedFrame = UserDefaults.standard.dictionary(forKey: "collapsedPanelFrame") as? [String: CGFloat],

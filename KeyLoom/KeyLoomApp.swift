@@ -156,7 +156,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             backing: .buffered, defer: false
         )
         configurePanel(panel)
-        panel.contentView = NSHostingView(rootView: KeyboardView())
+        panel.contentView = NSHostingView(rootView: KeyboardView().tint(.accentColor))
         restorePanelPosition(panel, width: panelWidth, height: panelHeight)
         observeLayoutChanges(panel)
         panel.orderFront(nil)
@@ -227,7 +227,7 @@ func openSettings() {
         return
     }
     let settingsView = SettingsView()
-    let hostingView = NSHostingView(rootView: settingsView)
+    let hostingView = NSHostingView(rootView: settingsView.tint(.accentColor))
     let window = NSPanel(
         contentRect: NSRect(x: 0, y: 0, width: 560, height: 480),
         styleMask: [.titled, .closable, .resizable],

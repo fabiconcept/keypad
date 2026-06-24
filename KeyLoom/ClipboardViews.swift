@@ -256,7 +256,7 @@ func openClipboard() {
     panel.hidesOnDeactivate = false
     panel.isReleasedWhenClosed = false
 
-    let hostingView = NSHostingView(rootView: ClipboardHistoryView())
+    let hostingView = NSHostingView(rootView: ClipboardHistoryView().tint(.accentColor))
     panel.contentView = hostingView
 
     if let screen = NSScreen.main {
