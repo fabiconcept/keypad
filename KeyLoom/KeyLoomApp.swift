@@ -150,14 +150,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let settings = KeyboardSettings.shared
         let panelWidth = settings.keyboardWidth + settings.keyboardPaddingHorizontal * 2
         let panelHeight = Self.calculatePanelHeight(settings: settings)
-
         let panel = FloatingPanel(
             contentRect: NSRect(x: 0, y: 0, width: panelWidth, height: panelHeight),
             styleMask: [.borderless, .nonactivatingPanel],
-            backing: .buffered,
-            defer: false
+            backing: .buffered, defer: false
         )
+        configurePanel(panel)
+        panel.contentView = NSHostingView(rootView: KeyboardView())
+        restorePanelPosition(panel, width: panelWidth, height: panelHeight)
+        observeLayoutChanges(panel)
+        panel.orderFront(nil)
+        floatingWindow = panel
+        mainWindow = panel
+    }
 
+    private func configurePanel(_ panel: FloatingPanel) {
         panel.isFloatingPanel = true
         panel.level = .floating
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
@@ -168,33 +175,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         panel.contentView?.wantsLayer = true
         panel.contentView?.layer?.borderWidth = 0
         panel.contentView?.layer?.borderColor = NSColor.clear.cgColor
+    }
 
-        let hostingView = NSHostingView(rootView: KeyboardView())
-        panel.contentView = hostingView
-
-        // Restore saved position or use default
+    private func restorePanelPosition(_ panel: FloatingPanel, width: CGFloat, height: CGFloat) {
         if let savedFrame = UserDefaults.standard.dictionary(forKey: "expandedPanelFrame") as? [String: CGFloat],
            let x = savedFrame["x"], let y = savedFrame["y"] {
             panel.setFrameOrigin(NSPoint(x: x, y: y))
         } else if let screen = NSScreen.main {
-            let screenFrame = screen.visibleFrame
-            let x = screenFrame.midX - panelWidth / 2
-            let y = screenFrame.maxY - panelHeight - 20
-            panel.setFrameOrigin(NSPoint(x: x, y: y))
+            let sf = screen.visibleFrame
+            panel.setFrameOrigin(NSPoint(x: sf.midX - width / 2, y: sf.maxY - height - 20))
         }
-
-        // Save position when moved
         NotificationCenter.default.addObserver(
-            forName: NSWindow.didMoveNotification,
-            object: panel,
-            queue: .main
+            forName: NSWindow.didMoveNotification, object: panel, queue: .main
         ) { _ in
-            let origin = panel.frame.origin
-            UserDefaults.standard.set(["x": origin.x, "y": origin.y], forKey: "expandedPanelFrame")
+            UserDefaults.standard.set(
+                ["x": panel.frame.origin.x, "y": panel.frame.origin.y],
+                forKey: "expandedPanelFrame"
+            )
         }
+    }
 
-        // Resize panel when layout settings change
-        settings.objectWillChange.sink { [weak panel] _ in
+    private func observeLayoutChanges(_ panel: FloatingPanel) {
+        KeyboardSettings.shared.objectWillChange.sink { [weak panel] _ in
             guard let panel = panel else { return }
             DispatchQueue.main.async {
                 let s = KeyboardSettings.shared
@@ -205,10 +207,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 panel.setFrame(frame, display: true, animate: false)
             }
         }.store(in: &cancellables)
-
-        panel.orderFront(nil)
-        floatingWindow = panel
-        mainWindow = panel
     }
 
     static func calculatePanelHeight(settings: KeyboardSettings) -> CGFloat {
@@ -232,7 +230,7 @@ func openSettings() {
     let hostingView = NSHostingView(rootView: settingsView)
     let window = NSPanel(
         contentRect: NSRect(x: 0, y: 0, width: 560, height: 480),
-        styleMask: [.titled, .closable, .nonactivatingPanel],
+        styleMask: [.titled, .closable, .resizable],
         backing: .buffered,
         defer: false
     )
